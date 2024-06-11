@@ -6,26 +6,25 @@ export default function Write() {
     const [title, setTitle] = useState('');
     const [image, setImage] = useState(null);
     const [category, setCategory] = useState('');
-   
+
     const handleContentChange = (e) => {
       setContent(e.target.value);
     };
-   
+
     const handleTitleChange = (e) => {
       setTitle(e.target.value);
     };
-   
+
     const handleImageChange = (e) => {
       setImage(e.target.files[0]);
     };
-   
+
     const handleCategoryChange = (e) => {
       setCategory(e.target.value);
     };
-   
+
     const handleSubmit = (e) => {
       e.preventDefault();
-      // Submit data to server
     };
 
     return(
@@ -35,10 +34,10 @@ export default function Write() {
                 <FormWrapper onSubmit={handleSubmit}>
                     <CategorySelect>
                         <select value={category} onChange={handleCategoryChange}>
-                        <option value="">말머리</option>
-                        <option value="category1">Category 1</option>
-                        <option value="category2">Category 2</option>
-                        <option value="category3">Category 3</option>
+                          <option value="">말머리</option>
+                          <option value="category1">자유게시판</option>
+                          <option value="category2">궁금해요</option>
+                          <option value="category3">사용후기</option>
                         </select>
                     </CategorySelect>
                     <TitleWrite>

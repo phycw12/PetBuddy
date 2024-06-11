@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FixedNav, MenuItem, MenuIcon, MenuText } from '../styles/emotion';
+import { FixedNav, MenuItem, MenuIcon, MenuText } from '../../styles/emotion';
 
 export default function Menu() {
     return (

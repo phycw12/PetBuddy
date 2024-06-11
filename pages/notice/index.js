@@ -1,8 +1,7 @@
 import { useState } from 'react';
 // import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-import { Wrapper, Logo, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, WritePage } from '../../styles/emotion';
+import { Wrapper, Logo, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, WritePage, DivisionLine } from '../../styles/emotion';
 
 export default function Notice() {
     const [activeMenu, setActiveMenu] = useState('공지사항');
@@ -54,6 +53,7 @@ export default function Notice() {
                         ))}
                     </PostList>
                 </Section>
+                <DivisionLine/>
                 <Section2>
                     <MenuList>
                         <Menu isActive={activeMenu === '자유게시판'} onClick={() => handleMenuClick('자유게시판', '/board')}>자유게시판</Menu>

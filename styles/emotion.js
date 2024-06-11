@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import '@fontsource/inria-sans'; // npm install --save @fontsource/inria-sans
 
 // menu
 
@@ -8,6 +7,8 @@ export const FixedNav = styled.div`
     bottom: 0;
     left: 37%;
     width: 400px;
+    width: 100%;
+    max-width: 410px;
     background-color: #fff;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -63,7 +64,7 @@ export const Wrapper = styled.div`
 export const Section = styled.section`
     width: 100%;
     max-width: 410px;
-    margin: 0px 80px;
+    margin: 0px 80px 20px 80px;
     box-sizing: border-box;
 `;
 
@@ -158,64 +159,253 @@ export const MenuList = styled.div`
 `;
 
 export const Menu = styled.a`
-  color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
-  cursor: pointer;
+    color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
+    cursor: pointer;
+`;
+
+export const DivisionLine = styled.div`
+    border-top: 1.5px solid #444444;
+    margin: 10px auto;
+    width: 400px;        
 `;
 
 // write
 
 export const WrapperWrite = styled.div`
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
 `;
 
 export const FormWrapper = styled.div`
-  margin-top: 60px;
+    margin-top: 60px;
 `;
 
 export const TitleWrite = styled.h1`
-  font-size: 24px;
-  margin: 0;
+    font-size: 24px;
+    margin-bottom: 10px;
+    input{
+    width: 410px;
+    border: none;
+    border-bottom : 2px solid #ccc;
+    };
+    input:focus {
+        outline : none;
+    };
 `;
 
 export const Editor = styled.div`
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 
-  textarea {
+    textarea {
     width: 100%;
     height: 200px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
-  }
+    border: none;
+    border-bottom: 2px solid #ccc;
+    resize: none;
+    };
+    textarea:focus{
+        outline: none;
+    }
 `;
 
 export const ImageUpload = styled.div`
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 `;
 
 export const WriteButton = styled.button`
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
+    background-color: #E1E1E1;
+    color: #585858;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
 
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
+    &:hover {
+    background-color: #D0CACA;
+}`;
 
 export const CategorySelect = styled.div`
-  margin-bottom: 20px;
-
-  select {
+    margin-bottom: 10px;
+    select {
+    width: 420px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
+}`;
+
+// signup
+
+export const SignUpContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    margin : 200px auto 0;
 `;
 
+export const SignupTitle = styled.div`
+    font-size: 20px;
+    color: #414141;
+    margin-bottom: 20px;
+`;
+
+export const IDInput = styled.div`
+    width: 250px;
+    margin-bottom: 20px;
+    input {
+    width: 250px;
+    border: none;
+    border-bottom : 2px solid #414141;
+    };
+    input:focus {
+        outline : none;
+    };
+`;
+
+export const PWInput = styled.div`
+    width: 250px;
+    margin-bottom: 20px;
+    input {
+    width: 250px;
+    border: none;
+    border-bottom : 2px solid #414141;
+    };
+    input:focus {
+        outline : none;
+    };
+`;
+
+export const PWCheck = styled.div`
+    width: 250px;
+    margin-bottom: 20px;
+    input {
+    width: 250px;
+    border: none;
+    border-bottom : 2px solid #414141;
+    };
+    input:focus {
+        outline : none;
+    };
+`;
+
+export const NicknameInput = styled.div`
+    width: 250px;
+    margin-bottom: 20px;
+    input {
+    width: 250px;
+    border: none;
+    border-bottom : 2px solid #414141;
+    };
+    input:focus {
+        outline : none;
+    };
+`;
+
+export const Terms = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+`;
+
+export const Term = styled.div`
+    margin-bottom: 10px;
+    font-size: 15px;
+`;
+
+export const Term1 = styled.div`
+    /* margin-bottom: 5px; */
+    font-size: 12px;
+    span {
+        margin-left: 100px;
+    }
+`;
+
+export const Term2 = styled.div`
+    margin-bottom: 10px;
+    font-size: 12px;
+    span {
+        margin-left: 100px;
+    }
+`;
+
+export const SignUpBtn = styled.button`
+    background-color: #E1E1E1;
+    color: #585858;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+    background-color: #D0CACA;
+    }
+`;
+
+// login
+
+export const LoginContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    margin : 200px auto 0;
+`;
+
+export const LoginTitle = styled.div`
+    font-size: 20px;
+    color: #414141;
+    margin-bottom: 20px;
+`;
+
+export const LoginID = styled.div`
+    width: 250px;
+    margin-bottom: 20px;
+    input {
+    width: 250px;
+    border: none;
+    border-bottom : 2px solid #414141;
+    };
+    input:focus {
+        outline : none;
+    };
+`;
+
+export const LoginPW = styled.div`
+    width: 250px;
+    margin-bottom: 20px;
+    input {
+    width: 250px;
+    border: none;
+    border-bottom : 2px solid #414141;
+    };
+    input:focus {
+        outline : none;
+    };
+`;
+
+export const LoginBtn = styled.button`
+    background-color: #E1E1E1;
+    color: #585858;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+    background-color: #D0CACA;
+    }
+`;
+
+export const SignupFind = styled.div`
+    display: flex;
+    flex-direction: row;
+    span {
+        margin: 10px;
+        cursor: pointer;
+    };
+`;
