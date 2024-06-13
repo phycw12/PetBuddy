@@ -2,20 +2,26 @@ import styled from '@emotion/styled';
 
 // menu
 
-export const FixedNav = styled.div`
+export const NavContainer = styled.div`
+    width: 100%;
+    background-color: transparent;
+    z-index: 998;
     position: fixed;
     bottom: 0;
-    left: 37%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+`;
+
+export const FixedNav = styled.div`
     width: 400px;
-    width: 100%;
-    max-width: 410px;
+    /* min-width: 230px; */
     background-color: #fff;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 10px 0;
-    z-index: 999;
     border-radius: 20px 20px 0 0;
 `;
 
@@ -37,21 +43,29 @@ export const MenuText = styled.span`
     font-size: 12px;
 `;
 
-// main, board, write
+// logo
+
+export const LogoContainer = styled.div`
+    width: 100%;
+    background-color: white;
+    z-index: 998;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+`;
 
 export const Logo = styled.div`
-    position: fixed;
-    width: 100%;
     color: gray;
-    background-color: white;
     font-size: 24px;
     font-weight: bold;
-    margin-top: -10px;
     padding: 10px;
-    // height: 7%;
     text-align: center;
     font-family: 'Inria Sans', sans-serif;
 `;
+
+// main, board, notice, question, review
 
 export const Wrapper = styled.div`
     display: flex;
@@ -137,12 +151,20 @@ export const Search = styled.img`
     height: 24px;
 `;
 
-export const WritePage = styled.img`
+export const WritePageContainer = styled.div`
+    width: 100%;
+    background-color: transparent;
+    z-index: 998;
     position: fixed;
-    bottom: 10%;
-    left: 60%;
+    bottom: 13%;
+    display: flex;
+    justify-content: center;
+`;
+
+export const WritePage = styled.img`
     width: 40px;
     height: 40px;
+    margin-left: 300px;
     cursor: pointer;
 `;
 
@@ -178,7 +200,7 @@ export const WrapperWrite = styled.div`
     display: flex;
 `;
 
-export const FormWrapper = styled.div`
+export const FormWrapper = styled.form`
     margin-top: 60px;
 `;
 
@@ -205,6 +227,7 @@ export const Editor = styled.div`
     border: none;
     border-bottom: 2px solid #ccc;
     resize: none;
+    line-height: 20px;
     };
     textarea:focus{
         outline: none;
@@ -367,8 +390,9 @@ export const LoginID = styled.div`
     margin-bottom: 20px;
     input {
     width: 250px;
-    border: none;
-    border-bottom : 2px solid #414141;
+    border : 2px solid #CFCFCF;
+    border-radius: 5px;
+    padding: 7px;
     };
     input:focus {
         outline : none;
@@ -380,8 +404,9 @@ export const LoginPW = styled.div`
     margin-bottom: 20px;
     input {
     width: 250px;
-    border: none;
-    border-bottom : 2px solid #414141;
+    border : 2px solid #CFCFCF;
+    border-radius: 5px;
+    padding: 7px;
     };
     input:focus {
         outline : none;
@@ -409,3 +434,106 @@ export const SignupFind = styled.div`
         cursor: pointer;
     };
 `;
+
+// mypage
+
+export const MyPageContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: 200px auto 0;
+`;
+
+export const MyPageSection1 = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+`;
+
+export const MyPageSection1_1 = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+export const NicknameLogout = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 10px;
+`;
+
+export const MyPageNickname = styled.div`
+    font-weight: bold;
+`;
+
+export const ProfileImg = styled.div`
+    width: 80px;
+    height: 80px;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+`;
+
+export const Logout = styled.button`
+    background-color: transparent;
+    border: none;
+    color: #007AFF;
+    cursor: pointer;
+`;
+
+export const MyPageId = styled.div`
+    margin-top: 10px;
+`;
+
+export const MyPageSection2 = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin: 10px 0;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    padding: 10px;
+`;
+
+export const MyPagePost = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+export const MyPageComment = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+export const MyPageSection3 = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    padding: 10px;
+`;
+
+export const MyPageSection3_1 = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 10px;
+`;
+export const MyPageSection3_2 = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+`;
+
+// post
+

@@ -1,0 +1,20 @@
+import { useRouter } from 'next/router';
+import { useAuth } from '../context/AuthContext';
+import { WritePageContainer, WritePage } from '../../styles/emotion';
+
+export default function WriteBtn() {
+    const router = useRouter();
+    const { user } = useAuth();
+
+    const handleWriteClick = () => {
+        if (user) {
+            router.push('/write');
+        } else {
+            alert('로그인이 필요합니다.');
+            router.push('/login');
+        }
+    };
+    return(
+        <WritePageContainer><WritePage src="/add.svg" alt="Write" onClick={handleWriteClick}/></WritePageContainer>
+    );
+};

@@ -1,10 +1,13 @@
-import { useState } from 'react';
-// import Link from 'next/link';
+import { useState, useEffect  } from 'react';
 import { useRouter } from 'next/router';
-import { Wrapper, Logo, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, WritePage, DivisionLine } from '../../styles/emotion';
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+import { Wrapper, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, DivisionLine } from '../../styles/emotion';
+import WriteBtn from '../writebtn';
 
-export default function Board() {
+export default function FreeBoard() {
     const [activeMenu, setActiveMenu] = useState('자유게시판');
+    const [recentPosts, setRecentPosts] = useState([]);
     const router = useRouter();
 
     const popularPosts = [
@@ -12,26 +15,26 @@ export default function Board() {
         { title: '사료 추천 부탁드립니다 !!', author: '코순왕자', date: '2024-04-13', views: 1330, heart: 30},
     ];
 
-    const recentPosts = [
-        { title: '자유게시판 메뉴입니당', author: '다롱공주', date: '2024-06-05', views: 80, heart: 30},
-        { title: '요즘 날씨가 너무 덥네요...', author: '뽀리', date: '2024-06-05', views: 50, heart: 30},
-        { title: '우리집 귀염둥이 사진입니당', author: '다롱공주', date: '2024-06-05', views: 80, heart: 30},
-        { title: '요즘 날씨가 너무 덥네요...', author: '뽀리', date: '2024-06-05', views: 50, heart: 30},
-    ];
+    useEffect(() => {
+        async function fetchRecentPosts() {
+            const q = query(collection(db, 'posts'), where('category', '==', 'freeboard'), orderBy('createdAt', 'desc'));
+            const querySnapshot = await getDocs(q);
+            const posts = [];
+            querySnapshot.forEach((doc) => {
+                posts.push(doc.data());
+            });
+            setRecentPosts(posts);
+        }
+        fetchRecentPosts();
+    }, []);
 
     const handleMenuClick = (menu, href) => {
         setActiveMenu(menu);
         router.push(href);
     };
 
-    const handleWriteClick = () => {
-        router.push('/write');
-    };
-    
-
     return (
         <>
-            <Logo>PetBuddy</Logo>
             <Wrapper>
                 <Section>
                     <TitleSearch>
@@ -56,7 +59,7 @@ export default function Board() {
                 <DivisionLine/>
                 <Section2>
                     <MenuList>
-                        <Menu isActive={activeMenu === '자유게시판'} onClick={() => handleMenuClick('자유게시판', '/board')}>자유게시판</Menu>
+                        <Menu isActive={activeMenu === '자유게시판'} onClick={() => handleMenuClick('자유게시판', '/freeboard')}>자유게시판</Menu>
                         <Menu isActive={activeMenu === '공지사항'} onClick={() => handleMenuClick('공지사항', '/notice')}>공지사항</Menu>
                         <Menu isActive={activeMenu === '궁금해요'} onClick={() => handleMenuClick('궁금해요', '/question')}>궁금해요</Menu>
                         <Menu isActive={activeMenu === '사용후기'} onClick={() => handleMenuClick('사용후기', '/review')}>사용후기</Menu>
@@ -64,19 +67,19 @@ export default function Board() {
                     <PostList>
                         {recentPosts.map((post, index) => (
                             <Post key={index}>
-                            <PostImage src={`/basic.svg`} alt={post.title}/>
+                            <PostImage src={`/basic.svg`} alt={post.title} />
                             <PostTitle>{post.title}</PostTitle>
-                            <PostAuthor>{post.author}</PostAuthor>
-                            <PostDate>{post.date}</PostDate>
-                            <PostFooter>
+                            <PostAuthor>{post.authorNickname}</PostAuthor>
+                            <PostDate>{post.createdAt.toDate().toString()}</PostDate>
+                            {/* <PostFooter>
                                 <span>조회수 {post.views}</span>
                                 <span>♡ {post.heart}</span>
-                            </PostFooter>
-                        </Post>
+                            </PostFooter> */}
+                            </Post>
                         ))}
                     </PostList>
                 </Section2>
-                <WritePage src="/add.svg" alt="Write" onClick={handleWriteClick}/>
+                <WriteBtn/>
             </Wrapper>
         </>
     );

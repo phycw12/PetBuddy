@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { SignUpContainer, SignupTitle, IDInput, PWInput, PWCheck, NicknameInput, Terms, Term, Term1, Term2, SignUpBtn } from '../../styles/emotion';
 
 export default function SignUp() {
+    const router = useRouter();
     const [emailId, setEmailId] = useState("");
     const [password, setPassword] = useState("");
     const [pwCheck, setPwCheck] = useState("");
@@ -32,6 +34,7 @@ export default function SignUp() {
             setPwCheck("");
             setNickname("");
             alert('회원가입에 성공하였습니다.');
+            router.push('/login');
         } catch (error) {
             console.error('회원가입 실패:', error);
             alert('회원가입에 실패하였습니다.');

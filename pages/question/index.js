@@ -1,8 +1,7 @@
 import { useState } from 'react';
-// import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-import { Wrapper, Logo, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, WritePage, DivisionLine } from '../../styles/emotion';
+import { Wrapper, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, DivisionLine } from '../../styles/emotion';
+import WriteBtn from '../writebtn';
 
 export default function Question() {
     const [activeMenu, setActiveMenu] = useState('궁금해요');
@@ -24,14 +23,9 @@ export default function Question() {
         setActiveMenu(menu);
         router.push(href);
     };
-    
-    const handleWriteClick = () => {
-        router.push('/write');
-    };
 
     return (
         <>
-            <Logo>PetBuddy</Logo>
             <Wrapper>
                 <Section>
                     <TitleSearch>
@@ -56,7 +50,7 @@ export default function Question() {
                 <DivisionLine/>
                 <Section2>
                     <MenuList>
-                        <Menu isActive={activeMenu === '자유게시판'} onClick={() => handleMenuClick('자유게시판', '/board')}>자유게시판</Menu>
+                        <Menu isActive={activeMenu === '자유게시판'} onClick={() => handleMenuClick('자유게시판', '/freeboard')}>자유게시판</Menu>
                         <Menu isActive={activeMenu === '공지사항'} onClick={() => handleMenuClick('공지사항', '/notice')}>공지사항</Menu>
                         <Menu isActive={activeMenu === '궁금해요'} onClick={() => handleMenuClick('궁금해요', '/question')}>궁금해요</Menu>
                         <Menu isActive={activeMenu === '사용후기'} onClick={() => handleMenuClick('사용후기', '/review')}>사용후기</Menu>
@@ -76,7 +70,7 @@ export default function Question() {
                         ))}
                     </PostList>
                 </Section2>
-                <WritePage src="/add.svg" alt="Write" onClick={handleWriteClick}/>
+                <WriteBtn/>
             </Wrapper>
         </>
     );
