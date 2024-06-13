@@ -27,6 +27,7 @@ export default function SignUp() {
                 password: password,
                 nickname: nickname,
                 createdAt: new Date(),
+                userType: 1,
             });
             console.log('회원가입 성공:', user);
             setEmailId("");

@@ -1,27 +1,51 @@
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useRouter } from 'next/router';
-import { Wrapper, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, DivisionLine } from '../../styles/emotion';
-import WriteBtn from '../writebtn';
+import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+import { Wrapper, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, DivisionLine } from '../../styles/emotion';
+import WriteBtn from '../components/writebtn';
 
 export default function Question() {
     const [activeMenu, setActiveMenu] = useState('궁금해요');
+    const [popularPosts, setPopularPosts] = useState([]);
+    const [recentPosts, setRecentPosts] = useState([]);
     const router = useRouter();
 
-    const popularPosts = [
-        { title: '냥이들 간식 후기 (추천)', author: '우돌이', date: '2024-05-12', views: 1830, heart: 30},
-        { title: '사료 추천 부탁드립니다 !!', author: '코순왕자', date: '2024-04-13', views: 1330, heart: 30},
-    ];
+    useEffect(() => {
+        async function fetchPopularPosts() {
+            const q = query(collection(db, 'posts'),
+                            orderBy('views', 'desc'),
+                            limit(2)); // 조회수가 가장 높은 2개의 글 가져오기
+            const querySnapshot = await getDocs(q);
+            const posts = [];
+            querySnapshot.forEach((doc) => {
+                posts.push({ id: doc.id, ...doc.data() });
+            });
+            setPopularPosts(posts);
+        }
+        fetchPopularPosts();
+    }, []);
 
-    const recentPosts = [
-        { title: '궁금해요 메뉴입니당', author: '다롱공주', date: '2024-06-05', views: 80, heart: 30},
-        { title: '요즘 날씨가 너무 덥네요...', author: '뽀리', date: '2024-06-05', views: 50, heart: 30},
-        { title: '우리집 귀염둥이 사진입니당', author: '다롱공주', date: '2024-06-05', views: 80, heart: 30},
-        { title: '요즘 날씨가 너무 덥네요...', author: '뽀리', date: '2024-06-05', views: 50, heart: 30},
-    ];
+    useEffect(() => {
+        async function fetchRecentPosts() {
+            const q = query(collection(db, 'posts'), where('category', '==', 'question'), orderBy('createdAt', 'desc'));
+            const querySnapshot = await getDocs(q);
+            const posts = [];
+            querySnapshot.forEach((doc) => {
+                posts.push(doc.data());
+            });
+            setRecentPosts(posts);
+        }
+        fetchRecentPosts();
+    }, []);
 
     const handleMenuClick = (menu, href) => {
         setActiveMenu(menu);
         router.push(href);
+    };
+
+    const handlePostClick = (postId) => {
+        router.push(`/post/${postId}`);
     };
 
     return (
@@ -35,10 +59,12 @@ export default function Question() {
                     <PostList>
                         {popularPosts.map((post, index) => (
                             <Post key={index}>
-                                <PostImage src={`/basic.svg`} alt={post.title}/>
-                                <PostTitle>{post.title}</PostTitle>
-                                <PostAuthor>{post.author}</PostAuthor>
-                                <PostDate>{post.date}</PostDate>
+                                <PostTitleImg onClick={() => handlePostClick(post.id)}>
+                                    <PostImage src={`/basic.svg`} alt={post.title}/>
+                                    <PostTitle>{post.title}</PostTitle>
+                                </PostTitleImg>
+                                <PostAuthor>{post.authorNickname}</PostAuthor>
+                                <PostDate>{post.createdAt.toDate().toString()}</PostDate>
                                 <PostFooter>
                                     <span>조회수 {post.views}</span>
                                     <span>♡ {post.heart}</span>
@@ -58,15 +84,17 @@ export default function Question() {
                     <PostList>
                         {recentPosts.map((post, index) => (
                             <Post key={index}>
-                            <PostImage src={`/basic.svg`} alt={post.title}/>
-                            <PostTitle>{post.title}</PostTitle>
-                            <PostAuthor>{post.author}</PostAuthor>
-                            <PostDate>{post.date}</PostDate>
-                            <PostFooter>
-                                <span>조회수 {post.views}</span>
-                                <span>♡ {post.heart}</span>
-                            </PostFooter>
-                        </Post>
+                                <PostTitleImg onClick={() => handlePostClick(post.id)}>
+                                    <PostImage src={`/basic.svg`} alt={post.title} />
+                                    <PostTitle>{post.title}</PostTitle>
+                                </PostTitleImg>
+                                <PostAuthor>{post.authorNickname}</PostAuthor>
+                                <PostDate>{post.createdAt.toDate().toString()}</PostDate>
+                                <PostFooter>
+                                    <span>조회수 {post.views}</span>
+                                    <span>♡</span>
+                                </PostFooter>
+                            </Post>
                         ))}
                     </PostList>
                 </Section2>

@@ -2,20 +2,22 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD8rlJPZCiKlggdk81yPn97Ov7_ryXA9iI",
-  authDomain: "petbuddy-cwd.firebaseapp.com",
-  projectId: "petbuddy-cwd",
-  storageBucket: "petbuddy-cwd.appspot.com",
-  messagingSenderId: "760393224272",
-  appId: "1:760393224272:web:c97eca95e0352d27ea8155",
-  measurementId: "G-W655Z3VJNB"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 // const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const storage = getStorage(app);
 
-export { auth, db };
+export { db, auth, storage, ref, getDownloadURL };

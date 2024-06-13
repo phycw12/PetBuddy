@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-import { useAuth } from '../context/AuthContext';
+import useAuthStore from '../zustand/authStore';
 import { WritePageContainer, WritePage } from '../../styles/emotion';
 
 export default function WriteBtn() {
     const router = useRouter();
-    const { user } = useAuth();
+    const { user } = useAuthStore();
 
     const handleWriteClick = () => {
         if (user) {
@@ -14,7 +14,10 @@ export default function WriteBtn() {
             router.push('/login');
         }
     };
-    return(
-        <WritePageContainer><WritePage src="/add.svg" alt="Write" onClick={handleWriteClick}/></WritePageContainer>
+
+    return (
+        <WritePageContainer>
+            <WritePage src="/add.svg" alt="Write" onClick={handleWriteClick} />
+        </WritePageContainer>
     );
-};
+}

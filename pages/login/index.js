@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
+import useAuthStore from '../zustand/authStore';
 import { LoginContainer, LoginTitle, LoginID, LoginPW, LoginBtn, SignupFind } from '../../styles/emotion';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [user, setUser] = useState(null); // 사용자 상태 추가
+    const [localUser, setLocalUser] = useState(null); // 사용자 상태 추가
+    const { setUser: setAuthUser } = useAuthStore(); // Zustand에서 사용자 상태 관리 함수
 
     const router = useRouter();
 
@@ -15,9 +17,11 @@ export default function Login() {
         // 사용자 로그인 상태 변경 감지
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setUser(user); // 로그인된 사용자 정보 설정
+                setAuthUser(user); // Zustand 스토어에 로그인된 사용자 정보 설정
+                setLocalUser(user); // 로컬 상태에도 사용자 정보 설정
             } else {
-                setUser(null); // 로그인된 사용자가 없으면 null로 설정
+                setAuthUser(null); // Zustand 스토어에서 로그인된 사용자가 없으면 null로 설정
+                setLocalUser(null); // 로컬 상태에서도 사용자 정보를 초기화
             }
         });
 
@@ -26,12 +30,14 @@ export default function Login() {
 
     const handleLogin = async () => {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            setAuthUser(userCredential.user); // Zustand 스토어에 사용자 정보 저장
+            setLocalUser(userCredential.user); // 로컬 상태에도 사용자 정보 저장
             alert('로그인에 성공하였습니다.');
-            router.push('/main');
+            router.push('/');
         } catch (error) {
             console.error('로그인 실패:', error);
-            alert('로그인에 실패하였습니다.');
+            alert('이메일 또는 비밀번호가 올바르지 않습니다.');
         }
     };
 
@@ -45,17 +51,10 @@ export default function Login() {
         }
     };
 
-    // 로그인된 상태에서는 이미 로그인된 상태라고 알림
-    if (user) {
-        alert('이미 로그인된 상태입니다.');
-        router.push('/main');
-        return null; // 로그인된 상태면 렌더링하지 않음
-    };
-
-    return(
+    return (
         <LoginContainer>
             <LoginTitle>로그인</LoginTitle>
-            <LoginID><input type="text" placeholder="아이디를 입력하세요." value={email} onChange={(e) => setEmail(e.target.value)}/></LoginID>
+            <LoginID><input type="text" placeholder="아이디를 입력하세요." value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={handleKeyDown}/></LoginID>
             <LoginPW><input type="password" placeholder="비밀번호를 입력하세요." value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}/></LoginPW>
             <LoginBtn onClick={handleLogin}>로그인</LoginBtn>
             <SignupFind>
@@ -64,4 +63,4 @@ export default function Login() {
             </SignupFind>
         </LoginContainer>
     );
-};
+}

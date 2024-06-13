@@ -1,34 +1,43 @@
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { auth } from '../firebase';
-import { useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { auth, db } from '../firebase';
+import useAuthStore from '../zustand/authStore';
+import { collection, where, query, getDocs } from 'firebase/firestore';
 import { MyPageContainer, MyPageSection1, MyPageSection1_1, NicknameLogout, ProfileImg, MyPageNickname, Logout, MyPageId, MyPageSection2, MyPagePost, MyPageComment, MyPageSection3, MyPageSection3_1, MyPageSection3_2 } from '../../styles/emotion';
 
 export default function MyPage() {
-    const { user, userData } = useAuth();
+    const { user, userData } = useAuthStore();
     const router = useRouter();
+
+    const [postCount, setPostCount] = useState(0); // 게시물 수 상태 추가
+
+    useEffect(() => {
+        if (user) {
+            fetchPostCount();
+        }
+    }, [user]);
+
+    const fetchPostCount = async () => {
+        try {
+            const q = query(collection(db, 'posts'), where('authorId', '==', user.uid));
+            const querySnapshot = await getDocs(q);
+            const count = querySnapshot.size;
+            setPostCount(count);
+        } catch (error) {
+            console.error('게시물 수 조회 중 오류:', error);
+        }
+    };
 
     const handleLogout = async () => {
         try {
             await auth.signOut();
             alert('로그아웃에 성공하였습니다.');
-            router.push('/main');
+            router.push('/');
         } catch (error) {
             console.error('로그아웃 중 오류 발생:', error);
             alert('로그아웃에 실패하였습니다.');
         }
     };
-
-    useEffect(() => {
-        if (!user) {
-            alert('로그인을 해주세요.');
-            router.push('/login');
-        }
-    }, [user, router]);
-
-    if (!user) {
-        return null;
-    }
 
     return (
         <MyPageContainer>
@@ -45,7 +54,7 @@ export default function MyPage() {
             <MyPageSection2>
                 <MyPagePost>
                     <span>작성글</span>
-                    <span>10</span>
+                    <span>{postCount}</span>
                 </MyPagePost>
                 <MyPageComment>
                     <span>작성댓글</span>

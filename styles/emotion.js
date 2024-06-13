@@ -31,6 +31,7 @@ export const MenuItem = styled.div`
     align-items: center;
     color: #333;
     font-size: 12px;
+    cursor: pointer;
 `;
 
     export const MenuIcon = styled.img`
@@ -113,11 +114,16 @@ export const Post = styled.div`
     text-align: center;
 `;
 
+export const PostTitleImg = styled.div`
+    margin-bottom: 5px;
+`;
+
 export const PostTitle = styled.div`
     height: 30%;
     font-size: 15px;
     font-weight: bold;
     padding-top: 15px;
+    cursor: pointer;
 `;
 
 export const PostDate = styled.div`
@@ -144,6 +150,7 @@ export const PostImage = styled.img`
     height: 100px;
     object-fit: cover;
     border-radius: 10px 10px 0 0;
+    cursor: pointer;
 `
 
 export const Search = styled.img`
@@ -219,7 +226,6 @@ export const TitleWrite = styled.h1`
 
 export const Editor = styled.div`
     margin-bottom: 20px;
-
     textarea {
     width: 100%;
     height: 200px;

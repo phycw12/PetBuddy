@@ -1,11 +1,25 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import useAuthStore from '../zustand/authStore';
 import { NavContainer, FixedNav, MenuItem, MenuIcon, MenuText } from '../../styles/emotion';
 
 export default function Menu() {
+    const { user } = useAuthStore();
+    const router = useRouter();
+
+    const handleWriteClick = () => {
+      if (user) {
+          router.push('/mypage');
+      } else {
+          alert('로그인이 필요합니다.');
+          router.push('/login');
+      }
+  };
+
     return (
       <NavContainer>
           <FixedNav>
-            <Link href="/main" style={{ textDecoration: "none"}}>
+            <Link href="/" style={{ textDecoration: "none"}}>
               <MenuItem>
                 <MenuIcon src="/home.svg" alt="Home" />
                 <MenuText>홈</MenuText>
@@ -23,12 +37,10 @@ export default function Menu() {
                 <MenuText>채팅</MenuText>
               </MenuItem>
             </Link>
-            <Link href="/mypage" style={{ textDecoration: "none"}}>
-              <MenuItem>
-                <MenuIcon src="/mypage.svg" alt="Profile" />
-                <MenuText>마이페이지</MenuText>
-              </MenuItem>
-            </Link>
+            <MenuItem onClick={handleWriteClick}>
+              <MenuIcon src="/mypage.svg" alt="Profile" />
+              <MenuText>마이페이지</MenuText>
+            </MenuItem>
           </FixedNav>
       </NavContainer>
       );

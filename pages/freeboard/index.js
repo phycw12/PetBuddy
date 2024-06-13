@@ -1,19 +1,30 @@
-import { useState, useEffect  } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { Wrapper, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, DivisionLine } from '../../styles/emotion';
-import WriteBtn from '../writebtn';
+import { Wrapper, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, MenuList, Menu, DivisionLine } from '../../styles/emotion';
+import WriteBtn from '../components/writebtn';
 
 export default function FreeBoard() {
     const [activeMenu, setActiveMenu] = useState('자유게시판');
+    const [popularPosts, setPopularPosts] = useState([]);
     const [recentPosts, setRecentPosts] = useState([]);
     const router = useRouter();
 
-    const popularPosts = [
-        { title: '냥이들 간식 후기 (추천)', author: '우돌이', date: '2024-05-12', views: 1830, heart: 30},
-        { title: '사료 추천 부탁드립니다 !!', author: '코순왕자', date: '2024-04-13', views: 1330, heart: 30},
-    ];
+    useEffect(() => {
+        async function fetchPopularPosts() {
+            const q = query(collection(db, 'posts'),
+                            orderBy('views', 'desc'),
+                            limit(2)); // 조회수가 가장 높은 2개의 글 가져오기
+            const querySnapshot = await getDocs(q);
+            const posts = [];
+            querySnapshot.forEach((doc) => {
+                posts.push({ id: doc.id, ...doc.data() });
+            });
+            setPopularPosts(posts);
+        }
+        fetchPopularPosts();
+    }, []);
 
     useEffect(() => {
         async function fetchRecentPosts() {
@@ -21,7 +32,7 @@ export default function FreeBoard() {
             const querySnapshot = await getDocs(q);
             const posts = [];
             querySnapshot.forEach((doc) => {
-                posts.push(doc.data());
+                posts.push({ id: doc.id, ...doc.data() });
             });
             setRecentPosts(posts);
         }
@@ -31,6 +42,10 @@ export default function FreeBoard() {
     const handleMenuClick = (menu, href) => {
         setActiveMenu(menu);
         router.push(href);
+    };
+
+    const handlePostClick = (postId) => {
+        router.push(`/post/${postId}`);
     };
 
     return (
@@ -44,10 +59,12 @@ export default function FreeBoard() {
                     <PostList>
                         {popularPosts.map((post, index) => (
                             <Post key={index}>
-                                <PostImage src={`/basic.svg`} alt={post.title}/>
-                                <PostTitle>{post.title}</PostTitle>
-                                <PostAuthor>{post.author}</PostAuthor>
-                                <PostDate>{post.date}</PostDate>
+                                <PostTitleImg onClick={() => handlePostClick(post.id)}>
+                                    <PostImage src={`/basic.svg`} alt={post.title}/>
+                                    <PostTitle>{post.title}</PostTitle>
+                                </PostTitleImg>
+                                <PostAuthor>{post.authorNickname}</PostAuthor>
+                                <PostDate>{post.createdAt.toDate().toString()}</PostDate>
                                 <PostFooter>
                                     <span>조회수 {post.views}</span>
                                     <span>♡ {post.heart}</span>
@@ -67,14 +84,16 @@ export default function FreeBoard() {
                     <PostList>
                         {recentPosts.map((post, index) => (
                             <Post key={index}>
-                            <PostImage src={`/basic.svg`} alt={post.title} />
-                            <PostTitle>{post.title}</PostTitle>
-                            <PostAuthor>{post.authorNickname}</PostAuthor>
-                            <PostDate>{post.createdAt.toDate().toString()}</PostDate>
-                            {/* <PostFooter>
-                                <span>조회수 {post.views}</span>
-                                <span>♡ {post.heart}</span>
-                            </PostFooter> */}
+                                <PostTitleImg onClick={() => handlePostClick(post.id)}>
+                                    <PostImage src={`/basic.svg`} alt={post.title} />
+                                    <PostTitle>{post.title}</PostTitle>
+                                </PostTitleImg>
+                                <PostAuthor>{post.authorNickname}</PostAuthor>
+                                <PostDate>{post.createdAt.toDate().toString()}</PostDate>
+                                <PostFooter>
+                                    <span>조회수 {post.views}</span>
+                                    <span>♡</span>
+                                </PostFooter>
                             </Post>
                         ))}
                     </PostList>
@@ -83,4 +102,4 @@ export default function FreeBoard() {
             </Wrapper>
         </>
     );
-};
+}
