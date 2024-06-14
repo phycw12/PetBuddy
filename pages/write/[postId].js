@@ -1,19 +1,42 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { db, storage } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import useAuthStore from '../zustand/authStore';
 import { WrapperWrite, Logo, FormWrapper, TitleWrite, Editor, ImageUpload, WriteButton, CategorySelect } from '../../styles/emotion';
 
-export default function Write() {
-    const { user, userData } = useAuthStore();
+export default function Post() {
     const router = useRouter();
+    const { postId } = router.query;
+    const { user, userData } = useAuthStore();
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const fileInputRef = useRef(null);
     const textAreaRef = useRef(null);
+
+    useEffect(() => {
+        async function fetchPostData() {
+            if (postId) {
+                try {
+                    const docRef = doc(db, 'posts', postId);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const postData = docSnap.data();
+                        setTitle(postData.title);
+                        setCategory(postData.category);
+                        setContent(postData.content);
+                    } else {
+                        console.log('No such document!');
+                    }
+                } catch (error) {
+                    console.error('Error fetching document:', error);
+                }
+            }
+        }
+        fetchPostData();
+    }, [postId]);
 
     const handleContentChange = (e) => {
         setContent(e.target.value);
@@ -54,27 +77,25 @@ export default function Write() {
         e.preventDefault();
 
         try {
-            // 게시물 데이터 생성
+            // 수정할 게시물 데이터 생성
             const postData = {
-                authorId: user.uid,
-                email: userData.email,
                 authorNickname: userData.nickname,
-                createdAt: serverTimestamp(),
+                createdAt: new Date(),
                 category,
                 title,
                 content,
-                views: 0,
             };
 
-            // Firestore에 게시물 추가
-            const docRef = await addDoc(collection(db, 'posts'), postData);
-            console.log('Document written with ID: ', docRef.id);
+            // Firestore에 수정된 게시물 업데이트
+            const docRef = doc(db, 'posts', postId);
+            await updateDoc(docRef, postData);
+            console.log('Document updated with ID: ', postId);
 
-            // 작성 완료 후 홈 페이지로 이동
+            // 수정 완료 후 게시물 페이지로 이동
             router.push(`/board/${category}`);
         } catch (error) {
-            console.error('Error adding document: ', error);
-        }
+                console.error('Error updating document: ', error);
+            }
     };
 
     const handleGoBack = () => {
@@ -126,4 +147,4 @@ export default function Write() {
             </WrapperWrite>
         </>
     );
-}
+};

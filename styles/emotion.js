@@ -146,7 +146,6 @@ export const PostFooter = styled.div`
 `;
 
 export const PostImage = styled.img`
-    width: 80%;
     height: 100px;
     object-fit: cover;
     border-radius: 10px 10px 0 0;
@@ -175,7 +174,7 @@ export const WritePage = styled.img`
     cursor: pointer;
 `;
 
-// board, notice, question, review
+// freeboard, notice, question, review
 
 export const MenuList = styled.div`
     display: flex;
@@ -196,6 +195,20 @@ export const DivisionLine = styled.div`
     border-top: 1.5px solid #444444;
     margin: 10px auto;
     width: 400px;        
+`;
+
+export const OrderBy = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    font-size: 12px;
+`;
+
+export const OrderByList = styled.div`
+    font-size: 12px;
+    margin-left: 5px; 
+    color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
+    cursor: pointer;
 `;
 
 // write
@@ -541,5 +554,61 @@ export const MyPageSection3_2 = styled.div`
     justify-content: space-around;
 `;
 
-// post
+// [postId].js
+
+export const PostIdContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    height: 500px;
+    margin : 100px auto;padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+`;
+
+export const PostIdTitle = styled.h1`
+    font-size: 24px;
+    color: #333;
+`;
+
+export const MetaInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+`;
+
+export const PostIdContents = styled.div`
+    max-width: 300px;
+    height: 300px;
+    overflow: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+`;
+
+export const ActionButtons = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+`;
+
+export const PostIdButton = styled.button`
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+    background-color: #0056b3;
+    }
+`;
 

@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import useAuthStore from './zustand/authStore';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
-import { getStorage, ref } from 'firebase/storage';
+import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { Wrapper, Section, Section2, TitleSearch, Title, Search, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
 import WriteBtn from './components/writebtn';
-
+import ContentLoader from 'react-content-loader';
 
 export default function Main(){
     const [popularPosts, setPopularPosts] = useState([]);
@@ -14,6 +14,28 @@ export default function Main(){
     const { user } = useAuthStore();
     const router = useRouter();
     const storage = getStorage();
+    const [searchImageUrl, setSearchImageUrl] = useState('');
+    const [basicImageUrl, setBasicImageUrl] = useState('');
+    const [loading, setLoading] = useState(true); // 이미지 로딩 상태
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const searchImageURL = await getDownloadURL(ref(storage, '/petbuddy/search.svg'));
+                setSearchImageUrl(searchImageURL);
+
+                const basicImageURL = await getDownloadURL(ref(storage, '/petbuddy/basic.svg'));
+                setBasicImageUrl(basicImageURL);
+
+                setLoading(false); // 이미지 로딩 완료
+            } catch (error) {
+                console.error('Error fetching images:', error);
+                setLoading(false); // 이미지 로딩 실패
+            }
+        };
+
+        fetchImages();
+    }, [storage]);
 
     useEffect(() => {
         async function fetchPopularPosts() {
@@ -58,17 +80,40 @@ export default function Main(){
                 <Section>
                     <TitleSearch>
                         <Title>인기글</Title>
-                        <Search src={`/search.svg`}/>
+                        {loading ? (
+                            <ContentLoader viewBox="0 0 400 100" height={100} width={400}>
+                                {/* Placeholder content */}
+                                <rect x="0" y="0" rx="5" ry="5" width="100%" height="100" />
+                            </ContentLoader>
+                        ) : (
+                            <Search src={searchImageUrl} alt="Search Image"/>
+                        )}
                     </TitleSearch>
                     <PostList>
                         {popularPosts.map((post, index) => (
                             <Post key={index}>
                                 <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                    <PostImage src={`/basic.svg`} alt={post.title}/>
+                                    {loading ? (
+                                        <ContentLoader viewBox="0 0 400 300" height={300} width={400}>
+                                            {/* Placeholder content */}
+                                            <rect x="0" y="0" rx="5" ry="5" width="100%" height="100%" />
+                                        </ContentLoader>
+                                    ) : (
+                                        <PostImage src={basicImageUrl} alt={post.title}/>
+                                    )}
                                     <PostTitle>{post.title}</PostTitle>
                                 </PostTitleImg>
                                 <PostAuthor>{post.authorNickname}</PostAuthor>
-                                <PostDate>{post.createdAt.toDate().toString()}</PostDate>
+                                <PostDate>
+                                    {new Intl.DateTimeFormat('ko-KR', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false,
+                                    }).format(post.createdAt.toDate())}
+                                </PostDate>
                                 <PostFooter>
                                     <span>조회수 {post.views}</span>
                                     <span>♡ {post.heart}</span>
@@ -83,11 +128,27 @@ export default function Main(){
                         {recentPosts.map((post, index) => (
                             <Post key={index}>
                                 <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                    <PostImage src={`/basic.svg`} alt={post.title} />
+                                    {loading ? (
+                                        <ContentLoader viewBox="0 0 400 300" height={300} width={400}>
+                                            {/* Placeholder content */}
+                                            <rect x="0" y="0" rx="5" ry="5" width="100%" height="100%" />
+                                        </ContentLoader>
+                                    ) : (
+                                        <PostImage src={basicImageUrl} alt={post.title}/>
+                                    )}
                                     <PostTitle>{post.title}</PostTitle>
                                 </PostTitleImg>
                                 <PostAuthor>{post.authorNickname}</PostAuthor>
-                                <PostDate>{post.createdAt.toDate().toString()}</PostDate>
+                                <PostDate>
+                                    {new Intl.DateTimeFormat('ko-KR', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false,
+                                    }).format(post.createdAt.toDate())}
+                                </PostDate>
                                 <PostFooter>
                                     <span>조회수 {post.views}</span>
                                     <span>♡</span>
