@@ -13,6 +13,7 @@ export default function Menu() {
     const [freeboardImageURL, setFreeboardImageURL] = useState('');
     const [chatImageURL, setChatImageURL] = useState('');
     const [mypageImageURL, setMypageImageURL] = useState('');
+    const [loading, setLoading] = useState(true); // 이미지 로딩 상태
 
     useEffect(() => {
       const fetchImages = async () => {
@@ -28,15 +29,14 @@ export default function Menu() {
 
               const mypageImageURL = await getDownloadURL(ref(storage, '/petbuddy/mypage.svg'));
               setMypageImageURL(mypageImageURL);
-
-          } catch (error) {
+              setLoading(false); // 이미지 로딩 완료
+            } catch (error) {
               console.error('Error fetching images:', error);
-          }
-      };
-
+              setLoading(true); // 이미지 로딩 실패
+            }
+        };
       fetchImages();
   }, [storage]);
-
 
     const handleWriteClick = () => {
       if (user) {
@@ -47,30 +47,35 @@ export default function Menu() {
       }
   };
 
+  if (loading) {
+    return (
+    <div>Loading...</div>);
+  };  
+
     return (
       <NavContainer>
           <FixedNav>
             <Link href="/" style={{ textDecoration: "none"}}>
               <MenuItem>
-                <MenuIcon src={homeImageURL} alt="Home" />
-                <MenuText>홈</MenuText>
+                  <MenuIcon src={homeImageURL} alt="Home"/>
+                  <MenuText>홈</MenuText>
               </MenuItem>
             </Link>
             <Link href="/board/freeboard" style={{ textDecoration: "none"}}>
               <MenuItem>
-                <MenuIcon src={freeboardImageURL} alt="Search" />
-                <MenuText>게시판</MenuText>
-              </MenuItem>
+                    <MenuIcon src={freeboardImageURL} alt="Search"/>
+                    <MenuText>게시판</MenuText>
+                </MenuItem>
             </Link>
             <Link href="/chat" style={{ textDecoration: "none"}}>
               <MenuItem>
-                <MenuIcon src={chatImageURL} alt="Chat" />
-                <MenuText>채팅</MenuText>
+                    <MenuIcon src={chatImageURL} alt="Chat"/>
+                    <MenuText>채팅</MenuText>
               </MenuItem>
             </Link>
             <MenuItem onClick={handleWriteClick}>
-              <MenuIcon src={mypageImageURL} alt="Profile" />
-              <MenuText>마이페이지</MenuText>
+                    <MenuIcon src={mypageImageURL} alt="Profile"/>
+                    <MenuText>마이페이지</MenuText>
             </MenuItem>
           </FixedNav>
       </NavContainer>

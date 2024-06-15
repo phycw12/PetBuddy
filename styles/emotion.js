@@ -66,7 +66,7 @@ export const Logo = styled.div`
     font-family: 'Inria Sans', sans-serif;
 `;
 
-// main, board, notice, question, review
+// index, board, notice, question, review
 
 export const Wrapper = styled.div`
     display: flex;
@@ -88,12 +88,6 @@ export const Section2 = styled.section`
     max-width: 410px;
     margin: 0px 100px 80px 100px;
     box-sizing: border-box;
-`;
-
-export const TitleSearch = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 `;
 
 export const Title = styled.h2`
@@ -152,25 +146,27 @@ export const PostImage = styled.img`
     cursor: pointer;
 `
 
+export const TitleHeader = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+`;
+
+// search
+
 export const Search = styled.img`
     width: 24px;
     height: 24px;
+    margin-left: 10px;
+    cursor: pointer;
 `;
 
-export const WritePageContainer = styled.div`
-    width: 100%;
-    background-color: transparent;
-    z-index: 998;
-    position: fixed;
-    bottom: 13%;
-    display: flex;
-    justify-content: center;
-`;
+// writebtn
 
 export const WritePage = styled.img`
-    width: 40px;
-    height: 40px;
-    margin-left: 300px;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
     cursor: pointer;
 `;
 
@@ -180,7 +176,7 @@ export const MenuList = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 20px 0 0 0;
+    margin: 20px 0 10px 0;
     font-weight: bold;
     text-decoration: none;
     /* color: #A4A4A4; */
@@ -206,6 +202,7 @@ export const OrderBy = styled.div`
 
 export const OrderByList = styled.div`
     font-size: 12px;
+    margin-bottom: 10px; 
     margin-left: 5px; 
     color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
     cursor: pointer;
@@ -488,15 +485,12 @@ export const MyPageNickname = styled.div`
     font-weight: bold;
 `;
 
-export const ProfileImg = styled.div`
+export const ProfileImg = styled.img`
     width: 80px;
     height: 80px;
-    background-color: #D9D9D9;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
 `;
 
 export const Logout = styled.button`
@@ -612,3 +606,76 @@ export const PostIdButton = styled.button`
     }
 `;
 
+export const CommentsContainer = styled.div`
+    width: 100%;
+    margin-top: 20px;
+`;
+
+export const CommentInputContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+`;
+
+export const CommentInput = styled.textarea`
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+`;
+
+export const CommentSubmitButton = styled.button`
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+`;
+
+export const Comment = styled.div`
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+`;
+
+export const CommentHeader = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+`;
+
+export const CommentBody = styled.div`
+    font-size: 14px;
+    color: #333;
+`;
+
+export const CommentActions = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    button {
+        margin-left: 10px;
+        border: none;
+        background: none;
+        color: #007bff;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+`;

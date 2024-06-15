@@ -1,10 +1,29 @@
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import useAuthStore from '../zustand/authStore';
-import { WritePageContainer, WritePage } from '../../styles/emotion';
+import { WritePage } from '../../styles/emotion';
 
 export default function WriteBtn() {
     const router = useRouter();
     const { user } = useAuthStore();
+    const storage = getStorage();
+    const [addImageURL, setAddImageURL] = useState('');
+    const [loading, setLoading] = useState(true); // 이미지 로딩 상태
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const addImageURL = await getDownloadURL(ref(storage, '/petbuddy/add.svg'));
+                setAddImageURL(addImageURL);
+                setLoading(false); // 이미지 로딩 완료
+            } catch (error) {
+                console.error('Error fetching images:', error);
+                setLoading(false); // 이미지 로딩 실패
+            }
+        };
+        fetchImages();
+    }, [storage]);
 
     const handleWriteClick = () => {
         if (user) {
@@ -15,9 +34,12 @@ export default function WriteBtn() {
         }
     };
 
+    if (loading) {
+        return (
+        <div>Loading...</div>);
+      };  
+
     return (
-        <WritePageContainer>
-            <WritePage src="/add.svg" alt="Write" onClick={handleWriteClick} />
-        </WritePageContainer>
+        <WritePage src={addImageURL} alt="Write" onClick={handleWriteClick}/>
     );
-}
+};

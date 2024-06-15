@@ -1,15 +1,35 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { db } from '../firebase';
-import { Wrapper, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../../styles/emotion';
+import { Wrapper, TitleHeader, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../../styles/emotion';
 import WriteBtn from '../components/writebtn';
+import SearchIcon from '../components/search';
 
 export default function FreeBoard() {
     const [activeMenu, setActiveMenu] = useState('freeboard');
     const [recentPosts, setRecentPosts] = useState([]);
     const [sortOrder, setSortOrder] = useState('createdAt');
     const router = useRouter();
+    const storage = getStorage();
+    const [basicImageUrl, setBasicImageUrl] = useState('');
+    const [loading, setLoading] = useState(true); // 이미지 로딩 상태
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const basicImageURL = await getDownloadURL(ref(storage, '/petbuddy/basic.svg'));
+                setBasicImageUrl(basicImageURL);
+                setLoading(false); // 이미지 로딩 완료
+            } catch (error) {
+                console.error('Error fetching images:', error);
+                setLoading(true); // 이미지 로딩 실패
+            }
+        };
+
+        fetchImages();
+    }, [storage]);
 
     useEffect(() => {
         async function fetchRecentPosts() {
@@ -37,6 +57,11 @@ export default function FreeBoard() {
         router.push(`/post/${postId}`);
     };
 
+    if (loading) {
+        return (
+        <div>Loading...</div>);
+    };
+
     return (
         <>
             <Wrapper>
@@ -51,11 +76,15 @@ export default function FreeBoard() {
                         <OrderByList isActive={sortOrder === 'createdAt'} onClick={() => handleSortOrderChange('createdAt')}>최신순</OrderByList>
                         <OrderByList isActive={sortOrder === 'views'} onClick={() => handleSortOrderChange('views')}>조회순</OrderByList>
                     </OrderBy>
+                    <TitleHeader>
+                        <SearchIcon/>
+                        <WriteBtn/>
+                    </TitleHeader>
                     <PostList>
                         {recentPosts.map((post, index) => (
                             <Post key={index}>
                                 <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                    <PostImage src={`/basic.svg`} alt={post.title} />
+                                    <PostImage src={basicImageUrl} alt={post.title} />
                                     <PostTitle>{post.title}</PostTitle>
                                 </PostTitleImg>
                                 <PostAuthor>{post.authorNickname}</PostAuthor>
@@ -77,7 +106,6 @@ export default function FreeBoard() {
                         ))}
                     </PostList>
                 </Section>
-                <WriteBtn/>
             </Wrapper>
         </>
     );
