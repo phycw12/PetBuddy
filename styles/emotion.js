@@ -176,7 +176,7 @@ export const MenuList = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 20px 0 10px 0;
+    margin: 50px 0 10px 0;
     font-weight: bold;
     text-decoration: none;
     /* color: #A4A4A4; */
@@ -556,11 +556,12 @@ export const PostIdContainer = styled.div`
     align-items: center;
     justify-content: center;
     max-width: 400px;
-    height: 500px;
-    margin : 100px auto;padding: 20px;
+    margin: 100px auto;
+    padding: 20px;
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 100vh;  // Full height of the viewport
 `;
 
 export const PostIdTitle = styled.h1`
@@ -574,11 +575,12 @@ export const MetaInfo = styled.div`
     font-size: 14px;
     color: #666;
     margin-bottom: 20px;
+    width: 100%;
 `;
 
 export const PostIdContents = styled.div`
-    max-width: 300px;
-    height: 300px;
+    flex: 1;
+    width: 80%;
     overflow: auto;
     background-color: #fff;
     padding: 20px;

@@ -80,7 +80,7 @@ export default function Post() {
             // 수정할 게시물 데이터 생성
             const postData = {
                 authorNickname: userData.nickname,
-                createdAt: new Date(),
+                editedAt: new Date(),
                 category,
                 title,
                 content,

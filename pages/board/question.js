@@ -21,7 +21,6 @@ export default function FreeBoard() {
             try {
                 const basicImageURL = await getDownloadURL(ref(storage, '/petbuddy/basic.svg'));
                 setBasicImageUrl(basicImageURL);
-
                 setLoading(false); // 이미지 로딩 완료
             } catch (error) {
                 console.error('Error fetching images:', error);
@@ -66,7 +65,6 @@ export default function FreeBoard() {
     return (
         <>
             <Wrapper>
-                <SearchIcon/>
                 <Section>
                     <MenuList>
                         <Menu isActive={activeMenu === 'freeboard'} onClick={() => handleMenuClick('freeboard', '/board/freeboard')}>자유게시판</Menu>
@@ -108,7 +106,6 @@ export default function FreeBoard() {
                         ))}
                     </PostList>
                 </Section>
-                <WriteBtn/>
             </Wrapper>
         </>
     );
