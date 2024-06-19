@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import useAuthStore from '../zustand/authStore';
-import { WritePage } from '../../styles/emotion';
+import { WritePage } from '@/styles/emotion';
 
 export default function WriteBtn() {
     const router = useRouter();

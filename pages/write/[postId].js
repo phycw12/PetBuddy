@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { db, storage } from '../firebase';
+import { db, storage } from '../../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import useAuthStore from '../zustand/authStore';
+import useAuthStore from '@/zustand/authStore';
 import { WrapperWrite, Logo, FormWrapper, TitleWrite, Editor, ImageUpload, WriteButton, CategorySelect } from '../../styles/emotion';
 
 export default function Post() {

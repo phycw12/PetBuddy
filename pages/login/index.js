@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
-import useAuthStore from '../zustand/authStore';
+import { auth } from '../../firebase';
+import useAuthStore from '@/zustand/authStore';
 import { LoginContainer, LoginTitle, LoginID, LoginPW, LoginBtn, SignupFind } from '../../styles/emotion';
 
 export default function Login() {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth, db } from '../firebase';
+import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { SignUpContainer, SignupTitle, IDInput, PWInput, PWCheck, NicknameInput, Terms, Term, Term1, Term2, SignUpBtn } from '../../styles/emotion';

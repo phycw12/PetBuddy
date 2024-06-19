@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { Wrapper, TitleHeader, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../../styles/emotion';
-import WriteBtn from '../components/writebtn';
-import SearchIcon from '../components/search';
+import WriteBtn from '@/components/writebtn';
+import SearchIcon from '@/components/search';
 
 export default function FreeBoard() {
     const [activeMenu, setActiveMenu] = useState('notice');

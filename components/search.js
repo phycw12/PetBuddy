@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
-import { Search } from '../../styles/emotion';
+import { Search } from '@/styles/emotion';
 
 export default function SearchIcon() {
     const [loading, setLoading] = useState(true); // 이미지 로딩 상태

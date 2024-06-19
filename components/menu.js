@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import useAuthStore from '../zustand/authStore';
-import { NavContainer, FixedNav, MenuItem, MenuIcon, MenuText } from '../../styles/emotion';
+import { NavContainer, FixedNav, MenuItem, MenuIcon, MenuText } from '@/styles/emotion';
 
 export default function Menu() {
     const { user } = useAuthStore();

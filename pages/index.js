@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import useAuthStore from './zustand/authStore';
+import useAuthStore from '@/zustand/authStore';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from '../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { Wrapper, Section, Section2, Title, TitleHeader, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
-import WriteBtn from './components/writebtn';
-import SearchIcon from './components/search';
+import WriteBtn from '@/components/writebtn';
+import SearchIcon from '@/components/search';
 
 export default function Main(){
     const [popularPosts, setPopularPosts] = useState([]);

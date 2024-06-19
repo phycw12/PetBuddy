@@ -681,3 +681,7 @@ export const CommentActions = styled.div`
         }
     }
 `;
+
+export const CommentEditBtn = styled.button`
+    visibility: ${({ editMode }) => (editMode ? 'hidden' : 'visible')};
+`;

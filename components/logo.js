@@ -1,4 +1,4 @@
-import { LogoContainer, Logo } from '../../styles/emotion';
+import { LogoContainer, Logo } from '@/styles/emotion';
 
 export default function LogoTitle() {
     return(

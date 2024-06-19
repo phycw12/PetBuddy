@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { auth, db } from '../firebase';
+import { auth, db } from '../../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
-import useAuthStore from '../zustand/authStore';
+import useAuthStore from '@/zustand/authStore';
 import { collection, where, query, getDocs } from 'firebase/firestore';
 import { MyPageContainer, MyPageSection1, MyPageSection1_1, NicknameLogout, ProfileImg, MyPageNickname, Logout, MyPageId, MyPageSection2, MyPagePost, MyPageComment, MyPageSection3, MyPageSection3_1, MyPageSection3_2 } from '../../styles/emotion';
 

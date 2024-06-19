@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { db, auth } from '../firebase';
+import { db, auth } from '../../firebase';
 import { doc, getDoc, getDocs, updateDoc, deleteDoc, collection, addDoc, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import ReactMarkdown from 'react-markdown';
-import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton } from '../../styles/emotion';
+import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn } from '../../styles/emotion';
 
 
 export default function Post() {
@@ -15,6 +15,7 @@ const [currentUser, setCurrentUser] = useState(null);
 const [userType, setUserType] = useState(null);
 const [newComment, setNewComment] = useState('');
 const [comments, setComments] = useState([]);
+const [editMode, setEditMode] = useState(false);
 
 useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -156,7 +157,7 @@ const handleCommentEdit = async (commentId, newContent) => {
         // 수정 후 필요한 작업 추가
     } catch (error) {
         console.error('Error updating document: ', error);
-    }
+    };
 };
 
 const handleCommentDelete = async (commentId) => {
@@ -258,9 +259,9 @@ return (
                                     rows={3}
                                 />
                                 <div>
-                                    <button onClick={() => handleCommentEdit(comment.id, comment.newContent)}>
+                                    <CommentEditBtn onClick={() => handleCommentEdit(comment.id, comment.newContent)}>
                                         저장
-                                    </button>
+                                    </CommentEditBtn>
                                     <button onClick={() => handleCommentEditToggle(comment.id)}>취소</button>
                                 </div>
                             </div>
@@ -272,7 +273,7 @@ return (
                 <CommentActions>
                     {currentUser && (currentUser.uid === comment.authorId || userType === 0) && (
                         <>
-                            <button onClick={() => handleCommentEditToggle(comment.id)}>수정</button>
+                            <CommentEditBtn editMode={comment.editMode} onClick={() => handleCommentEditToggle(comment.id)}>수정</CommentEditBtn>
                             <button onClick={() => handleCommentDelete(comment.id)}>삭제</button>
                         </>
                     )}
