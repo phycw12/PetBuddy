@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import useAuthStore from '@/zustand/authStore';
 import { db, storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, getDoc, getDocs, updateDoc, query, where, collection } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, query, where, collection, getDocs } from 'firebase/firestore';
 import { updatePassword } from 'firebase/auth';
 import ReactMarkdown from 'react-markdown';
 import { ProfileWrapper, ProfileHeader, ProfileImageContainer, ProfileImageUploadButton, ProfileNicknameInput, ProfilePasswordInput, ProfilePasswordConfirmInput, ProfileButtonContainer, ProfileButton, ProfileWithdrawButton } from '../../styles/emotion';
@@ -16,15 +16,33 @@ export default function ProfileManager() {
     const [nickname, setLocalNickname] = useState(stateNickname); 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserData = async () => {
             if (user) {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    setLocalNickname(userData.nickname);
-                    setProfileImgUrl(userData.profileImg);
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', user.uid));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        setLocalNickname(userData.nickname);
+
+                        // 프로필 이미지 URL 설정
+                        if (userData.profileImg) {
+                            setProfileImgUrl(userData.profileImg);
+                        } else {
+                            // 프로필 이미지가 없을 경우 기본 이미지 설정
+                            const defaultImageRef = ref(storage, '/petbuddy/basic.svg');
+                            const defaultImageURL = await getDownloadURL(defaultImageRef);
+                            setProfileImgUrl(defaultImageURL);
+                        }
+                    } else {
+                        console.error('사용자 데이터를 찾을 수 없습니다.');
+                    }
+                } catch (error) {
+                    console.error('사용자 데이터를 가져오는 중 오류 발생:', error);
+                } finally {
+                    setLoading(false); // 데이터 로딩 완료
                 }
             }
         };
@@ -102,7 +120,11 @@ export default function ProfileManager() {
         }
     };
 
-    // 컴포넌트 정의
+    if (loading) {
+        return <div>Loading...</div>;
+    };
+
+    // Markdown 컴포넌트 정의
     const components = {
         img: ({ src, alt }) => (
             <img src={src} alt={alt} style={{ maxWidth: '200px', maxHeight: '100px', borderRadius: '50%' }} />

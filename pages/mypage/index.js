@@ -3,8 +3,9 @@ import { useRouter } from 'next/router';
 import { auth, db } from '../../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import useAuthStore from '@/zustand/authStore';
-import { collection, where, query, getDocs } from 'firebase/firestore';
-import { MyPageContainer, MyPageSection1, MyPageSection1_1, NicknameLogout, ProfileImg, MyPageNickname, Logout, MyPageId, MyPageSection2, MyPagePost, MyPageComment, MyPageSection3, MyPageSection3_1, MyPageSection3_2 } from '../../styles/emotion';
+import { doc, collection, where, query, getDoc, getDocs } from 'firebase/firestore';
+import { MyPageContainer, MyPageSection1, MyPageSection1_1, NicknameLogout, MyPageNickname, Logout, MyPageId, MyPageSection2, MyPagePost, MyPageComment, MyPageSection3, MyPageSection3_1, MyPageSection3_2 } from '../../styles/emotion';
+import ReactMarkdown from 'react-markdown';
 
 export default function MyPage() {
     const { user, userData, nickname, setNickname } = useAuthStore();
@@ -14,6 +15,32 @@ export default function MyPage() {
     const storage = getStorage();
     const [profileImageURL, setProfileImageURL] = useState('');
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    setNickname(userData.nickname);
+
+                    // 프로필 이미지 URL 설정
+                    if (userData.profileImg) {
+                        setProfileImageURL(userData.profileImg);
+                    } else {
+                        // 프로필 이미지가 없을 경우 기본 이미지 설정
+                        const defaultImageRef = ref(storage, '/petbuddy/basic.svg');
+                        const defaultImageURL = await getDownloadURL(defaultImageRef);
+                        setProfileImageURL(defaultImageURL);
+                    }
+                } else {
+                    console.error('사용자 데이터를 찾을 수 없습니다.');
+                }
+                setLoading(false); // 데이터 로딩 완료
+            }
+        };
+        fetchUserData();
+    }, [user, setNickname]);
 
     useEffect(() => {
         if (userData) {
@@ -65,23 +92,27 @@ export default function MyPage() {
         router.push(href);
     };
     
-    useEffect(() => {
-        const fetchImages = async () => {
-            try {
-                const profileImageURL = await getDownloadURL(ref(storage, '/petbuddy/profile.svg'));
-                setProfileImageURL(profileImageURL);
-                setLoading(false); // 이미지 로딩 완료
-            } catch (error) {
-                console.error('Error fetching images:', error);
-                setLoading(false); // 이미지 로딩 실패
-            }
-        };
-        fetchImages();
-    }, [storage]);
+    // useEffect(() => {
+    //     const fetchImages = async () => {
+    //         try {
+    //             const profileImageURL = await getDownloadURL(ref(storage, '/petbuddy/profile.svg'));
+    //             setProfileImageURL(profileImageURL);
+    //             setLoading(false); // 이미지 로딩 완료
+    //         } catch (error) {
+    //             console.error('Error fetching images:', error);
+    //             setLoading(false); // 이미지 로딩 실패
+    //         }
+    //     };
+    //     fetchImages();
+    // }, [storage]);
 
     if (loading) {
         return (
         <div>Loading...</div>);
+    };
+
+    const components = {
+        img: ({ src, alt }) => <img src={src} alt={alt} style={{ maxWidth: '200px', maxHeight: '100px', borderRadius: '50%' }} />
     };
 
 
@@ -89,7 +120,7 @@ export default function MyPage() {
         <MyPageContainer>
             <MyPageSection1>
                 <MyPageSection1_1>
-                    <ProfileImg src={profileImageURL}/>
+                    <ReactMarkdown components={components}>{`![Profile Image](${profileImageURL})`}</ReactMarkdown>
                     <NicknameLogout>
                         <MyPageNickname>{nickname || '닉네임 없음'}</MyPageNickname>
                         <MyPageId>{userData?.email || '아이디 없음'}</MyPageId>
