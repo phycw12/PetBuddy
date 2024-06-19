@@ -10,10 +10,10 @@ import { ProfileWrapper, ProfileHeader, ProfileImageContainer, ProfileImageUploa
 
 export default function ProfileManager() {
     const router = useRouter();
-    const { user } = useAuthStore();
+    const { user, nickname: stateNickname, setNickname } = useAuthStore();
     const [profileImg, setProfileImg] = useState(null);
     const [profileImgUrl, setProfileImgUrl] = useState("");
-    const [nickname, setNickname] = useState("");
+    const [nickname, setLocalNickname] = useState(stateNickname); 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -23,13 +23,13 @@ export default function ProfileManager() {
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    setNickname(userData.nickname);
+                    setLocalNickname(userData.nickname);
                     setProfileImgUrl(userData.profileImg);
                 }
             }
         };
         fetchUserData();
-    }, [user]);
+    }, [user, setNickname]);
 
     const handleImageChange = (e) => {
         if (e.target.files[0]) {
@@ -37,7 +37,7 @@ export default function ProfileManager() {
         }
     };
 
-    const handleNicknameChange = (e) => setNickname(e.target.value);
+    const handleNicknameChange = (e) => setLocalNickname(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
@@ -94,7 +94,7 @@ export default function ProfileManager() {
                 }
 
                 alert('프로필이 성공적으로 업데이트되었습니다.');
-                router.back();
+                router.reload();
             } catch (error) {
                 console.error('프로필 업데이트 실패:', error);
                 alert('프로필 업데이트에 실패하였습니다.');

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { auth, db } from '../../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import useAuthStore from '@/zustand/authStore';
@@ -8,13 +7,19 @@ import { collection, where, query, getDocs } from 'firebase/firestore';
 import { MyPageContainer, MyPageSection1, MyPageSection1_1, NicknameLogout, ProfileImg, MyPageNickname, Logout, MyPageId, MyPageSection2, MyPagePost, MyPageComment, MyPageSection3, MyPageSection3_1, MyPageSection3_2 } from '../../styles/emotion';
 
 export default function MyPage() {
-    const { user, userData } = useAuthStore();
+    const { user, userData, nickname, setNickname } = useAuthStore();
     const router = useRouter();
     const [postCount, setPostCount] = useState(0);
     const [CommentCount, setCommentCount] = useState(0);
     const storage = getStorage();
     const [profileImageURL, setProfileImageURL] = useState('');
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (userData) {
+            setNickname(userData.nickname);
+        }
+    }, [userData, setNickname]);
 
     useEffect(() => {
         if (user) {
@@ -86,7 +91,7 @@ export default function MyPage() {
                 <MyPageSection1_1>
                     <ProfileImg src={profileImageURL}/>
                     <NicknameLogout>
-                        <MyPageNickname>{userData?.nickname || '닉네임 없음'}</MyPageNickname>
+                        <MyPageNickname>{nickname || '닉네임 없음'}</MyPageNickname>
                         <MyPageId>{userData?.email || '아이디 없음'}</MyPageId>
                         <Logout onClick={handleLogout}>로그아웃</Logout>
                     </NicknameLogout>
@@ -114,4 +119,4 @@ export default function MyPage() {
             </MyPageSection3>
         </MyPageContainer>
     );
-}
+};

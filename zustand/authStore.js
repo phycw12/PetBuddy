@@ -6,13 +6,18 @@ import { doc, getDoc } from 'firebase/firestore';
 const useAuthStore = create((set) => ({
     user: null,
     userData: null,
+    nickname: '', // 닉네임 상태 추가
+    profileImg: '', // 프로필 이미지 URL 상태 추가
     setUser: (user) => set({ user }),
     setUserData: (userData) => set({ userData }),
-    clearUser: () => set({ user: null, userData: null }),
+    setNickname: (nickname) => set({ nickname }), // 닉네임 설정 함수
+    setProfileImg: (profileImg) => set({ profileImg }), // 프로필 이미지 설정 함수
+    clearUser: () => set({ user: null, userData: null, nickname: '', profileImg: '' }), // 모든 상태 초기화 함수
 }));
 
+// Firebase의 인증 상태 변경 리스너
 const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    const { setUser, setUserData, clearUser } = useAuthStore.getState();
+    const { setUser, setUserData, setNickname, setProfileImg, clearUser } = useAuthStore.getState();
 
     if (user) {
         try {
@@ -22,6 +27,8 @@ const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (userDoc.exists()) {
                 setUser(user);
                 setUserData(userDoc.data());
+                setNickname(userDoc.data().nickname); // 닉네임 설정
+                setProfileImg(userDoc.data().profileImg); // 프로필 이미지 URL 설정
             } else {
                 console.error('사용자 문서가 존재하지 않습니다.');
                 clearUser();
