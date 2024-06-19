@@ -105,7 +105,7 @@ export default function MyPage() {
             <MyPageSection3>
                 <MyPageSection3_1>
                     <span onClick={() => handlePostClick('/mypage/postmanager')}>게시글 관리</span>
-                    <span>프로필 관리</span>
+                    <span onClick={() => handlePostClick('/mypage/profilemanager')}>프로필 관리</span>
                 </MyPageSection3_1>
                 <MyPageSection3_2>
                     <span>알림</span>

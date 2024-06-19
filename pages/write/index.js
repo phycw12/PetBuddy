@@ -4,7 +4,7 @@ import { db, storage } from '../../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import useAuthStore from '@/zustand/authStore';
-import { WrapperWrite, Logo, FormWrapper, TitleWrite, Editor, ImageUpload, WriteButton, CategorySelect } from '../../styles/emotion';
+import { WrapperWrite, FormWrapper, TitleWrite, Editor, ImageUpload, WriteButton, CategorySelect } from '../../styles/emotion';
 
 export default function Write() {
     const { user, userData } = useAuthStore();
@@ -31,7 +31,7 @@ export default function Write() {
         const file = e.target.files[0];
         if (file) {
             const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_'); // 특수 문자 제거
-            const imageRef = ref(storage, `images/${sanitizedFileName}`);
+            const imageRef = ref(storage, `post/${sanitizedFileName}`);
             await uploadBytes(imageRef, file);
             const imageUrl = await getDownloadURL(imageRef);
             insertImageUrl(imageUrl);

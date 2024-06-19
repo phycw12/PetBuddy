@@ -693,58 +693,179 @@ export const PostManagementWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 400px;
+    max-width: 600px;
     margin: 100px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const PostWritten = styled.div`
-    font-size: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
 `;
 
 export const PostWrittenWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
 `;
 
 export const PostWrittenContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 `;
 
 export const PostWrittenTitle = styled.div`
-    
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 `;
 
 export const PostManagementDelete = styled.div`
-    
+    background-color: gray;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
 `;
 
 export const PostManagementDate = styled.div`
-    
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
 `;
 
 export const CommentWritten = styled.div`
-    font-size: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
 `;
 
 export const CommentWrittenWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
 `;
 
 export const CommentWrittenContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 `;
 
 export const CommentWrittenContent = styled.div`
-    
+    font-size: 16px;
+    cursor: pointer;
 `;
 
 export const CommentWrittenTitle = styled.div`
-    
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+    cursor: pointer;
+`;
+
+export const DivisionLine2 = styled.div`
+    border-bottom: 1px solid #ccc;
+    margin: 10px 0;
+`;
+
+// profilemanager
+
+export const ProfileWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    `;
+
+export const ProfileHeader = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    `;
+
+export const ProfileImageContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    `;
+
+export const ProfileImage = styled.div`
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-bottom: 10px;
+    `;
+
+export const ProfileImageUploadButton = styled.div`
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    `;
+
+export const ProfileNicknameInput = styled.input`
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    `;
+
+export const ProfilePasswordInput = styled.input`
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    `;
+
+export const ProfilePasswordConfirmInput = styled.input`
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    `;
+
+export const ProfileButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    `;
+
+export const ProfileButton = styled.span`
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 10px;
+
+    &:last-child {
+        background-color: #f44336;
+    }
+    `;
+
+export const ProfileWithdrawButton = styled.div`
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: center;
 `;

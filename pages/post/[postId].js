@@ -84,7 +84,7 @@ const handleDelete = async () => {
             await deleteDoc(postRef);
 
             alert('게시글과 댓글이 삭제되었습니다.');
-            router.push(`/board/${post.category}`); // 글이 있던 카테고리 페이지로 이동
+            router.back();
         }
     }
 };
