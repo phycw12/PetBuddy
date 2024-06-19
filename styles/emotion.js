@@ -811,6 +811,14 @@ export const ProfileImageUploadButton = styled.div`
     cursor: pointer;
     `;
 
+export const ProfileImageDeleteButton = styled.div`
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    `;
+
 export const ProfileNicknameInput = styled.input`
     width: 100%;
     padding: 10px;

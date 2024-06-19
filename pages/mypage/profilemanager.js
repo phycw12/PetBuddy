@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useAuthStore from '@/zustand/authStore';
 import { db, storage } from '../../firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { doc, getDoc, updateDoc, query, where, collection, getDocs } from 'firebase/firestore';
 import { updatePassword } from 'firebase/auth';
 import ReactMarkdown from 'react-markdown';
-import { ProfileWrapper, ProfileHeader, ProfileImageContainer, ProfileImageUploadButton, ProfileNicknameInput, ProfilePasswordInput, ProfilePasswordConfirmInput, ProfileButtonContainer, ProfileButton, ProfileWithdrawButton } from '../../styles/emotion';
+import { ProfileWrapper, ProfileHeader, ProfileImageContainer, ProfileImageUploadButton, ProfileImageDeleteButton, ProfileNicknameInput, ProfilePasswordInput, ProfilePasswordConfirmInput, ProfileButtonContainer, ProfileButton, ProfileWithdrawButton } from '../../styles/emotion';
 
 export default function ProfileManager() {
     const router = useRouter();
@@ -52,6 +52,31 @@ export default function ProfileManager() {
     const handleImageChange = (e) => {
         if (e.target.files[0]) {
             setProfileImg(e.target.files[0]);
+        }
+    };
+
+    const handleImageDelete = async () => {
+        if (user && profileImgUrl) {
+            try {
+                // 프로필 이미지 삭제
+                const imageRef = ref(storage, profileImgUrl); // 이미지 경로를 사용하여 ref 생성
+                await deleteObject(imageRef);
+    
+                // Firestore의 users 컬렉션 업데이트 (프로필 이미지 삭제)
+                await updateDoc(doc(db, 'users', user.uid), {
+                    profileImg: null
+                });
+    
+                // 기본 이미지 URL로 설정
+                const defaultImageRef = ref(storage, '/petbuddy/basic.svg');
+                const defaultImageURL = await getDownloadURL(defaultImageRef);
+                setProfileImgUrl(defaultImageURL);
+    
+                alert('프로필 이미지가 삭제되었습니다.');
+            } catch (error) {
+                console.error('프로필 이미지 삭제 실패:', error);
+                alert('프로필 이미지 삭제에 실패하였습니다.');
+            }
         }
     };
 
@@ -138,8 +163,13 @@ export default function ProfileManager() {
                 <ReactMarkdown components={components}>{`![Profile Image](${profileImgUrl})`}</ReactMarkdown>
                 <ProfileImageUploadButton>
                     <input type="file" accept="image/*" onChange={handleImageChange} />
-                    프로필 수정 이미지 첨부 버튼
+                    프로필 사진
                 </ProfileImageUploadButton>
+                {profileImgUrl && (
+                    <ProfileImageDeleteButton onClick={handleImageDelete}>
+                        프로필 삭제
+                    </ProfileImageDeleteButton>
+                )}
             </ProfileImageContainer>
             <ProfileNicknameInput
                 placeholder="닉네임 변경 input"

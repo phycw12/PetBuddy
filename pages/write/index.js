@@ -30,8 +30,8 @@ export default function Write() {
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_'); // 특수 문자 제거
-            const imageRef = ref(storage, `post/${sanitizedFileName}`);
+            const imageFileName = `${user.uid}_${file.name}`; // 파일명 설정: userid + 파일이름
+            const imageRef = ref(storage, `post/${imageFileName}`);
             await uploadBytes(imageRef, file);
             const imageUrl = await getDownloadURL(imageRef);
             insertImageUrl(imageUrl);
@@ -126,4 +126,4 @@ export default function Write() {
             </WrapperWrite>
         </>
     );
-}
+};
