@@ -29,7 +29,7 @@ export default function SignUp() {
                 nickname: nickname,
                 createdAt: new Date(),
                 userType: 1,
-                profileImg: none,
+                profileImg: null,
             });
             console.log('회원가입 성공:', user);
             setEmailId("");

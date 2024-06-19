@@ -786,6 +786,8 @@ export const ProfileWrapper = styled.div`
     background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    height: 600px;
     `;
 
 export const ProfileHeader = styled.div`
@@ -799,14 +801,6 @@ export const ProfileImageContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
-    `;
-
-export const ProfileImage = styled.div`
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin-bottom: 10px;
     `;
 
 export const ProfileImageUploadButton = styled.div`
