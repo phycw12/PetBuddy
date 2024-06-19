@@ -109,9 +109,18 @@ const handleCommentSubmit = async () => {
             throw new Error('User document not found');
         }
         const userData = userDoc.data();
+
+        // 글의 제목 가져오기
+        const postDoc = await getDoc(doc(db, 'posts', postId));
+        if (!postDoc.exists()) {
+            throw new Error('Post document not found');
+        }
+        const postData = postDoc.data();
+
         // 댓글 데이터 구성
         const commentData = {
             postId: postId,
+            postTitle: postData.title,
             authorId: currentUser.uid,
             authorName: userData.nickname, // 사용자의 닉네임 가져오기
             content: newComment,

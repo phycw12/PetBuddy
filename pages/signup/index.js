@@ -23,11 +23,13 @@ export default function SignUp() {
             const user = userCredential.user;
             
             await setDoc(doc(db, "users", user.uid), {
+                userId: user.uid,
                 email: emailId,
                 password: password,
                 nickname: nickname,
                 createdAt: new Date(),
                 userType: 1,
+                profileImg: none,
             });
             console.log('회원가입 성공:', user);
             setEmailId("");

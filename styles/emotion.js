@@ -561,7 +561,7 @@ export const PostIdContainer = styled.div`
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 100vh;  // Full height of the viewport
+    height: 100vh;
 `;
 
 export const PostIdTitle = styled.h1`
@@ -684,4 +684,67 @@ export const CommentActions = styled.div`
 
 export const CommentEditBtn = styled.button`
     visibility: ${({ editMode }) => (editMode ? 'hidden' : 'visible')};
+`;
+
+// postmanager
+
+export const PostManagementWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+`;
+
+export const PostWritten = styled.div`
+    font-size: 15px;
+`;
+
+export const PostWrittenWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const PostWrittenContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const PostWrittenTitle = styled.div`
+    
+`;
+
+export const PostManagementDelete = styled.div`
+    
+`;
+
+export const PostManagementDate = styled.div`
+    
+`;
+
+export const CommentWritten = styled.div`
+    font-size: 15px;
+`;
+
+export const CommentWrittenWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const CommentWrittenContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const CommentWrittenContent = styled.div`
+    
+`;
+
+export const CommentWrittenTitle = styled.div`
+    
 `;

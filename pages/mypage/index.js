@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { auth, db } from '../../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import useAuthStore from '@/zustand/authStore';
@@ -9,14 +10,16 @@ import { MyPageContainer, MyPageSection1, MyPageSection1_1, NicknameLogout, Prof
 export default function MyPage() {
     const { user, userData } = useAuthStore();
     const router = useRouter();
-    const [postCount, setPostCount] = useState(0); // 게시물 수 상태 추가
+    const [postCount, setPostCount] = useState(0);
+    const [CommentCount, setCommentCount] = useState(0);
     const storage = getStorage();
     const [profileImageURL, setProfileImageURL] = useState('');
-    const [loading, setLoading] = useState(true); // 이미지 로딩 상태
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (user) {
             fetchPostCount();
+            fetchCommentCount();
         }
     }, [user]);
 
@@ -26,6 +29,17 @@ export default function MyPage() {
             const querySnapshot = await getDocs(q);
             const count = querySnapshot.size;
             setPostCount(count);
+        } catch (error) {
+            console.error('게시물 수 조회 중 오류:', error);
+        }
+    };
+
+    const fetchCommentCount = async () => {
+        try {
+            const q = query(collection(db, 'comments'), where('authorId', '==', user.uid));
+            const querySnapshot = await getDocs(q);
+            const count = querySnapshot.size;
+            setCommentCount(count);
         } catch (error) {
             console.error('게시물 수 조회 중 오류:', error);
         }
@@ -42,6 +56,9 @@ export default function MyPage() {
         }
     };
 
+    const handlePostClick = (href) => {
+        router.push(href);
+    };
     
     useEffect(() => {
         const fetchImages = async () => {
@@ -82,12 +99,12 @@ export default function MyPage() {
                 </MyPagePost>
                 <MyPageComment>
                     <span>작성댓글</span>
-                    <span>15</span>
+                    <span>{CommentCount}</span>
                 </MyPageComment>
             </MyPageSection2>
             <MyPageSection3>
                 <MyPageSection3_1>
-                    <span>게시글 관리</span>
+                    <span onClick={() => handlePostClick('/mypage/postmanager')}>게시글 관리</span>
                     <span>프로필 관리</span>
                 </MyPageSection3_1>
                 <MyPageSection3_2>
