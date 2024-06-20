@@ -8,14 +8,14 @@ import ReactMarkdown from 'react-markdown';
 import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn } from '../../styles/emotion';
 
 export default function Post() {
-const router = useRouter();
-const { postId } = router.query;
-const [post, setPost] = useState(null);
-const [currentUser, setCurrentUser] = useState(null);
-const [userType, setUserType] = useState(null);
-const [newComment, setNewComment] = useState('');
-const [comments, setComments] = useState([]);
-const [editMode, setEditMode] = useState(false);
+    const router = useRouter();
+    const { postId } = router.query;
+    const [post, setPost] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userType, setUserType] = useState(null);
+    const [newComment, setNewComment] = useState('');
+    const [comments, setComments] = useState([]);
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -217,6 +217,12 @@ const [editMode, setEditMode] = useState(false);
     const components = {
         img: ({ src, alt }) => (
             <img src={src} alt={alt} style={{ maxWidth: '400px', maxHeight: '500px' }} />
+        )
+    };
+
+    const profileComponents = {
+            img: ({ src, alt }) => (
+                <img src={src} alt={alt} style={{ maxWidth: '50px', maxHeight: '50px', borderRadius: '50%' }} />
         )
     };
 

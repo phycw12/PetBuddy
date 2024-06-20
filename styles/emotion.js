@@ -58,7 +58,7 @@ export const LogoContainer = styled.div`
 `;
 
 export const Logo = styled.div`
-    color: gray;
+    color: #01DF01;
     font-size: 24px;
     font-weight: bold;
     padding: 10px;
@@ -94,6 +94,7 @@ export const Title = styled.h2`
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
+    color: #3D3D3D;
 `;
 
 export const PostList = styled.div`
@@ -871,3 +872,7 @@ export const ProfileWithdrawButton = styled.div`
     margin-top: 20px;
     text-align: center;
 `;
+
+// chat
+
+ 
