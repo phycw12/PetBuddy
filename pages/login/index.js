@@ -41,14 +41,14 @@ export default function Login() {
         }
     };
 
-    const handleWriteClick = () => {
-        router.push('/signup');
-    };
-
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             handleLogin();
         }
+    };
+
+    const handleLinkClick = (href) => {
+        router.push(href);
     };
 
     return (
@@ -58,8 +58,8 @@ export default function Login() {
             <LoginPW><input type="password" placeholder="비밀번호를 입력하세요." value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}/></LoginPW>
             <LoginBtn onClick={handleLogin}>로그인</LoginBtn>
             <SignupFind>
-                <span onClick={handleWriteClick}>회원가입</span>
-                <span>아이디 / 비밀번호 찾기</span>
+                <span onClick={() => handleLinkClick('/signup')}>회원가입</span>
+                <span onClick={() => handleLinkClick('/login/accountRecovery')}>아이디 / 비밀번호 찾기</span>
             </SignupFind>
         </LoginContainer>
     );

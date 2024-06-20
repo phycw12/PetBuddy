@@ -918,3 +918,98 @@ export const InquiryList = styled.div`
         font-size: 16px;
     }
 `;
+
+// accountRecovery
+
+export const AccountRecoveryContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+`;
+
+export const AccountRecoveryTitle = styled.h1`
+    font-size: 24px;
+    margin-bottom: 20px;
+`;
+
+export const AccountRecoveryIDInput = styled.div`
+    width: 100%;
+    margin-bottom: 10px;
+    input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+`;
+
+export const AccountRecoveryPWInput = styled.div`
+    width: 100%;
+    margin-bottom: 10px;
+    input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+`;
+
+export const AccountRecoveryPWCheck = styled.div`
+    width: 100%;
+    margin-bottom: 10px;
+    input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+`;
+
+export const AccountRecoveryNicknameInput = styled.div`
+    width: 100%;
+    margin-bottom: 10px;
+    input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+`;
+
+export const AccountRecoveryTerms = styled.div`
+    margin-bottom: 10px;
+`;
+
+export const AccountRecoveryTerm = styled.label`
+    display: block;
+    margin-bottom: 5px;
+`;
+
+export const AccountRecoveryBtn = styled.button`
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #0070f3; /* 적절한 색상으로 수정 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #0058b8; /* hover 시 색상 변경 */
+    }
+`;
