@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { db } from '../../firebase';
-import { Wrapper, TitleHeader, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../../styles/emotion';
+import { Wrapper, TitleHeader, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, DivisionLine } from '../../styles/emotion';
 import WriteBtn from '@/components/writebtn';
 import SearchIcon from '@/components/search';
 
@@ -72,6 +72,7 @@ export default function FreeBoard() {
                         <Menu isActive={activeMenu === 'question'} onClick={() => handleMenuClick('question', '/board/question')}>궁금해요</Menu>
                         <Menu isActive={activeMenu === 'review'} onClick={() => handleMenuClick('review', '/board/review')}>사용후기</Menu>
                     </MenuList>
+                    <DivisionLine/>
                     <OrderBy>
                         <OrderByList isActive={sortOrder === 'createdAt'} onClick={() => handleSortOrderChange('createdAt')}>최신순</OrderByList>
                         <OrderByList isActive={sortOrder === 'views'} onClick={() => handleSortOrderChange('views')}>조회순</OrderByList>

@@ -185,6 +185,7 @@ export const MenuList = styled.div`
 
 export const Menu = styled.a`
     color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
+    font-size: 15px;
     cursor: pointer;
 `;
 
@@ -873,6 +874,17 @@ export const ProfileWithdrawButton = styled.div`
     text-align: center;
 `;
 
-// chat
 
- 
+// find
+
+export const FindWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    height: 500px;
+    `;
