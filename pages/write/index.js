@@ -30,7 +30,9 @@ export default function Write() {
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const imageFileName = `${user.uid}_${file.name}`; // 파일명 설정: userid + 파일이름
+            const now = new Date();
+            const formattedDate = now.toISOString().replace(/[:.-]/g, '');
+            const imageFileName = `${user.uid}_${formattedDate}_${file.name}`;
             const imageRef = ref(storage, `post/${imageFileName}`);
             await uploadBytes(imageRef, file);
             const imageUrl = await getDownloadURL(imageRef);
