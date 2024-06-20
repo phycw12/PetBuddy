@@ -90,8 +90,8 @@ export const Section2 = styled.section`
     box-sizing: border-box;
 `;
 
-export const Title = styled.h2`
-    font-size: 24px;
+export const Title = styled.div`
+    font-size: 15px;
     font-weight: bold;
     margin-bottom: 20px;
     color: #3D3D3D;
@@ -887,4 +887,34 @@ export const FindWrapper = styled.div`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 50px;
     height: 500px;
-    `;
+`;
+
+// inquiry
+
+export const InquiryWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    height: 70vh;
+    overflow-y: auto;
+`;
+
+export const InquiryList = styled.div`
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    div{
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+    p{
+        margin: 0;
+        font-size: 16px;
+    }
+`;

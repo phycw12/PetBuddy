@@ -145,7 +145,7 @@ export default function MyPage() {
                 </MyPageSection3_1>
                 <MyPageSection3_2>
                     <span>알림</span>
-                    <span>문의하기</span>
+                    <span onClick={() => handlePostClick('/mypage/inquiry')}>문의하기</span>
                 </MyPageSection3_2>
             </MyPageSection3>
         </MyPageContainer>
