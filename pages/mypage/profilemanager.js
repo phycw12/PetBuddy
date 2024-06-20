@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useAuthStore from '@/zustand/authStore';
-import { db, storage } from '../../firebase';
+import { db, storage, auth } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { doc, getDoc, updateDoc, query, where, collection, getDocs } from 'firebase/firestore';
+import { getAuth, deleteUser, signOut } from "firebase/auth";
+import { doc, getDoc, updateDoc, query, where, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import { updatePassword } from 'firebase/auth';
 import ReactMarkdown from 'react-markdown';
 import { ProfileWrapper, ProfileHeader, ProfileImageContainer, ProfileImageUploadButton, ProfileImageDeleteButton, ProfileNicknameInput, ProfilePasswordInput, ProfilePasswordConfirmInput, ProfileButtonContainer, ProfileButton, ProfileWithdrawButton } from '../../styles/emotion';
@@ -56,7 +57,16 @@ export default function ProfileManager() {
     };
 
     const handleImageDelete = async () => {
+        const defaultImagePath = '/petbuddy/basic.svg';
+        const defaultImageRef = ref(storage, defaultImagePath);
+        const defaultImageURL = await getDownloadURL(defaultImageRef);
+    
         if (user && profileImgUrl) {
+            if (profileImgUrl === defaultImageURL) {
+                alert('기본 이미지는 삭제할 수 없습니다.');
+                return;
+            }
+    
             try {
                 // 프로필 이미지 삭제
                 const imageRef = ref(storage, profileImgUrl); // 이미지 경로를 사용하여 ref 생성
@@ -68,8 +78,6 @@ export default function ProfileManager() {
                 });
     
                 // 기본 이미지 URL로 설정
-                const defaultImageRef = ref(storage, '/petbuddy/basic.svg');
-                const defaultImageURL = await getDownloadURL(defaultImageRef);
                 setProfileImgUrl(defaultImageURL);
     
                 alert('프로필 이미지가 삭제되었습니다.');
@@ -145,6 +153,107 @@ export default function ProfileManager() {
         }
     };
 
+    const extractImageUrls = (content) => {
+        const regex = /!\[.*?\]\((.*?)\)/g; // Markdown 이미지 링크 형식: ![alt](url)
+        let matches;
+        const urls = [];
+        while ((matches = regex.exec(content)) !== null) {
+            urls.push(matches[1]);
+        }
+        return urls;
+    };
+
+    // 회원 탈퇴
+
+    const deleteUserData = async (userId) => {
+        try {
+            // 1. Firestore에서 사용자 데이터 삭제
+            await deleteDoc(doc(db, 'users', userId));
+            console.log('User data deleted from Firestore');
+    
+            // 2. Firestore에서 사용자가 작성한 게시글 및 댓글 삭제
+            const postsQuery = query(collection(db, 'posts'), where('authorId', '==', userId));
+            const postsSnapshot = await getDocs(postsQuery);
+    
+            if (!postsSnapshot.empty) { // 게시글 데이터가 있는 경우에만 실행
+                const deletePostPromises = postsSnapshot.docs.map(async (postDoc) => {
+                    const postData = postDoc.data();
+                    
+                    // 게시글 내용에서 이미지 URL 추출 및 삭제
+                    const imageUrls = extractImageUrls(postData.content); // content에서 이미지 링크를 추출하는 함수
+    
+                    const deleteImagePromises = imageUrls.map((imageUrl) => {
+                        const imageRef = ref(storage, imageUrl);
+                        return deleteObject(imageRef);
+                    });
+                    await Promise.all(deleteImagePromises);
+    
+                    // 게시글에 첨부된 이미지 삭제
+                    if (postData.imageUrl) {
+                        const imageRef = ref(storage, postData.imageUrl);
+                        await deleteObject(imageRef);
+                    }
+                    
+                    // 게시글 삭제
+                    await deleteDoc(postDoc.ref);
+                });
+    
+                await Promise.all(deletePostPromises);
+                console.log('User posts and associated images deleted from Firestore and Storage');
+            }
+    
+            const commentsQuery = query(collection(db, 'comments'), where('authorId', '==', userId));
+            const commentsSnapshot = await getDocs(commentsQuery);
+    
+            if (!commentsSnapshot.empty) { // 댓글 데이터가 있는 경우에만 실행
+                const deleteCommentPromises = commentsSnapshot.docs.map(async (commentDoc) => {
+                    await deleteDoc(commentDoc.ref);
+                });
+    
+                await Promise.all(deleteCommentPromises);
+                console.log('User comments deleted from Firestore');
+            }
+    
+           // 3. Storage에서 사용자 프로필 이미지 삭제
+            const profileImgRef = ref(storage, `profileImages/${userId}`);
+            const profileImgSnapshot = await getDownloadURL(profileImgRef);
+
+            if (profileImgSnapshot) {
+                await deleteObject(profileImgRef);
+                console.log('User profile image deleted from Storage');
+            }
+        } catch (error) {
+            console.error('Error deleting user data: ', error);
+        }
+    };
+    
+    const deleteCurrentUser = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                await deleteUserData(user.uid); // Firestore 및 Storage에서 데이터 삭제
+                await deleteUser(user); // Firebase Authentication에서 사용자 삭제
+                console.log('User deleted successfully');
+            } catch (error) {
+                console.error('Error deleting user: ', error);
+            }
+        } else {
+            console.log('No user is currently signed in');
+        }
+    };
+    
+    // 컴포넌트 내에서 호출 예시
+    const handleDeleteAccount = async () => {
+        const confirmDelete = window.confirm('정말 탈퇴하시겠습니까?');
+        if (confirmDelete) {
+            await deleteCurrentUser();
+            alert('회원 탈퇴가 완료되었습니다.');
+            await signOut(auth);
+            router.push('/');
+        }
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     };
@@ -192,7 +301,7 @@ export default function ProfileManager() {
                 <ProfileButton onClick={() => router.back()}>취소</ProfileButton>
                 <ProfileButton onClick={handleUpdateProfile}>확인</ProfileButton>
             </ProfileButtonContainer>
-            <ProfileWithdrawButton>회원탈퇴</ProfileWithdrawButton>
+            <ProfileWithdrawButton onClick={handleDeleteAccount}>회원탈퇴</ProfileWithdrawButton>
         </ProfileWrapper>
     );
 };
