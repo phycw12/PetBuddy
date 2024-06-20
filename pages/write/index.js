@@ -31,7 +31,13 @@ export default function Write() {
         const file = e.target.files[0];
         if (file) {
             const now = new Date();
-            const formattedDate = now.toISOString().replace(/[:.-]/g, '');
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const formattedDate = `${year}${month}${day}${hours}${minutes}`;
+            
             const imageFileName = `${user.uid}_${formattedDate}_${file.name}`;
             const imageRef = ref(storage, `post/${imageFileName}`);
             await uploadBytes(imageRef, file);

@@ -2,17 +2,18 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { db, storage } from '../../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import useAuthStore from '@/zustand/authStore';
 import { WrapperWrite, FormWrapper, TitleWrite, Editor, ImageUpload, WriteButton, CategorySelect } from '../../styles/emotion';
 
-export default function Post() {
+export default function PostEdit() {
     const router = useRouter();
     const { postId } = router.query;
     const { user, userData } = useAuthStore();
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
+    const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 추적
     const fileInputRef = useRef(null);
     const textAreaRef = useRef(null);
 
@@ -27,6 +28,7 @@ export default function Post() {
                         setTitle(postData.title);
                         setCategory(postData.category);
                         setContent(postData.content);
+                        setImageUrls(extractImageUrls(postData.content)); // 이미지 URL 추출
                     } else {
                         console.log('No such document!');
                     }
@@ -54,11 +56,18 @@ export default function Post() {
         const file = e.target.files[0];
         if (file) {
             const now = new Date();
-            const formattedDate = now.toISOString().replace(/[:.-]/g, '');
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const formattedDate = `${year}${month}${day}${hours}${minutes}`;
+
             const imageFileName = `${user.uid}_${formattedDate}_${file.name}`;
             const imageRef = ref(storage, `post/${imageFileName}`);
             await uploadBytes(imageRef, file);
             const imageUrl = await getDownloadURL(imageRef);
+            setImageUrls((prevUrls) => [...prevUrls, imageUrl]);
             insertImageUrl(imageUrl);
         }
     };
@@ -79,6 +88,15 @@ export default function Post() {
         e.preventDefault();
 
         try {
+            const newImageUrls = extractImageUrls(content);
+            const removedImageUrls = imageUrls.filter((url) => !newImageUrls.includes(url));
+            
+            // 삭제된 이미지 처리
+            await Promise.all(removedImageUrls.map(async (url) => {
+                const imageRef = ref(storage, url);
+                await deleteObject(imageRef);
+            }));
+
             // 수정할 게시물 데이터 생성
             const postData = {
                 authorNickname: userData.nickname,
@@ -96,12 +114,22 @@ export default function Post() {
             // 수정 완료 후 게시물 페이지로 이동
             router.push(`/board/${category}`);
         } catch (error) {
-                console.error('Error updating document: ', error);
-            }
+            console.error('Error updating document: ', error);
+        }
     };
 
     const handleGoBack = () => {
         router.back(); // 이전 페이지로 돌아가기
+    };
+
+    const extractImageUrls = (text) => {
+        const regex = /!\[image\]\((.*?)\)/g;
+        const urls = [];
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            urls.push(match[1]);
+        }
+        return urls;
     };
 
     return (

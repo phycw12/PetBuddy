@@ -7,16 +7,15 @@ import { onAuthStateChanged } from 'firebase/auth';
 import ReactMarkdown from 'react-markdown';
 import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn } from '../../styles/emotion';
 
-
 export default function Post() {
-    const router = useRouter();
-    const { postId } = router.query;
-    const [post, setPost] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
-    const [userType, setUserType] = useState(null);
-    const [newComment, setNewComment] = useState('');
-    const [comments, setComments] = useState([]);
-    const [editMode, setEditMode] = useState(false);
+const router = useRouter();
+const { postId } = router.query;
+const [post, setPost] = useState(null);
+const [currentUser, setCurrentUser] = useState(null);
+const [userType, setUserType] = useState(null);
+const [newComment, setNewComment] = useState('');
+const [comments, setComments] = useState([]);
+const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -72,34 +71,34 @@ export default function Post() {
             if (confirmDelete) {
                 // 게시글 참조
                 const postRef = doc(db, 'posts', postId);
-    
+
                 // 게시글 데이터 가져오기
                 const postSnapshot = await getDoc(postRef);
                 if (postSnapshot.exists()) {
                     const postData = postSnapshot.data();
                     const content = postData.content; // 게시글의 내용과 이미지 링크가 포함된 content 필드
-    
+
                     // 이미지 링크 추출 (가정: 이미지 링크가 특정 형식을 따름)
                     const imageUrls = extractImageUrls(content); // content에서 이미지 링크를 추출하는 함수
-    
+
                     // 이미지 삭제
                     const deleteImagePromises = imageUrls.map((imageUrl) => {
                         const imageRef = ref(storage, imageUrl);
                         return deleteObject(imageRef);
                     });
                     await Promise.all(deleteImagePromises);
-    
+
                     // 댓글들 참조 및 삭제
                     const commentsQuery = query(collection(db, 'comments'), where('postId', '==', postId));
                     const commentsSnapshot = await getDocs(commentsQuery);
-    
+
                     // 댓글들 삭제
                     const deleteCommentPromises = commentsSnapshot.docs.map((commentDoc) => deleteDoc(commentDoc.ref));
                     await Promise.all(deleteCommentPromises);
-    
+
                     // 게시글 삭제
                     await deleteDoc(postRef);
-    
+
                     alert('게시글과 댓글이 삭제되었습니다.');
                     router.back();
                 } else {
@@ -225,102 +224,101 @@ export default function Post() {
         return <div>Loading...</div>;
     }
 
-return (
-    <PostIdContainer>
-        <PostIdTitle>제목 : {post.title}</PostIdTitle>
-        {currentUser && (currentUser.uid === post.authorId || userType === 0) && (
-            <ActionButtons>
-                <PostIdButton onClick={handleEdit}>수정</PostIdButton>
-                <PostIdButton onClick={handleDelete}>삭제</PostIdButton>
-            </ActionButtons>
-        )}
-        <PostIdButton onClick={handleGoBack}>뒤로가기</PostIdButton>
-        <MetaInfo>
-            <span>카테고리 : {post.category}</span>
-            <span>작성자 : {post.authorNickname}</span>
-            <span>조회수 : {post.views + 1}</span>
-            <span>
-            작성일 :{' '}
-            {new Intl.DateTimeFormat('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-            }).format(post.createdAt.toDate())}
-            </span>
-        </MetaInfo>
-        <PostIdContents>
-            <ReactMarkdown components={components}>{post.content.replace(/\n/g, '  \n')}</ReactMarkdown>
-        </PostIdContents>
-        <CommentsContainer>
-            <CommentInputContainer>
-                <CommentInput
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="댓글을 작성하세요..."
-                />
-                <CommentSubmitButton onClick={handleCommentSubmit}>작성</CommentSubmitButton>
-            </CommentInputContainer>
-            {comments.map((comment) => (
-            <Comment key={comment.id}>
-                <CommentHeader>
-                    {/* Profile picture can be added here */}
-                    <div>
-                        <span>{comment.authorName}</span>
-                        <span>
-                            {new Intl.DateTimeFormat('ko-KR', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: false,
-                            }).format(comment.createdAt.toDate())}
-                        </span>
-                    </div>
-                </CommentHeader>
-                {comment.editMode ? (
-                    <CommentBody>
-                        {currentUser && currentUser.uid === comment.authorId && (
+    return (
+        <PostIdContainer>
+            <PostIdTitle>제목 : {post.title}</PostIdTitle>
+            {currentUser && (currentUser.uid === post.authorId || userType === 0) && (
+                <ActionButtons>
+                    <PostIdButton onClick={handleEdit}>수정</PostIdButton>
+                    <PostIdButton onClick={handleDelete}>삭제</PostIdButton>
+                </ActionButtons>
+            )}
+            <PostIdButton onClick={handleGoBack}>뒤로가기</PostIdButton>
+            <MetaInfo>
+                <span>카테고리 : {post.category}</span>
+                <span>작성자 : {post.authorNickname}</span>
+                <span>조회수 : {post.views + 1}</span>
+                <span>
+                    작성일 :{' '}
+                    {new Intl.DateTimeFormat('ko-KR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    }).format(post.createdAt.toDate())}
+                </span>
+            </MetaInfo>
+            <PostIdContents>
+                <ReactMarkdown components={components}>{post.content.replace(/\n/g, '  \n')}</ReactMarkdown>
+            </PostIdContents>
+            <CommentsContainer>
+                <CommentInputContainer>
+                    <CommentInput
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="댓글을 작성하세요..."
+                    />
+                    <CommentSubmitButton onClick={handleCommentSubmit}>작성</CommentSubmitButton>
+                </CommentInputContainer>
+                {comments.map((comment) => (
+                    <Comment key={comment.id}>
+                        <CommentHeader>
                             <div>
-                                <textarea
-                                    value={comment.newContent}
-                                    onChange={(e) =>
-                                        setComments((prevComments) =>
-                                            prevComments.map((prevComment) =>
-                                                prevComment.id === comment.id
-                                                    ? { ...prevComment, newContent: e.target.value }
-                                                    : prevComment
-                                            )
-                                        )
-                                    }
-                                    rows={3}
-                                />
-                                <div>
-                                    <CommentEditBtn onClick={() => handleCommentEdit(comment.id, comment.newContent)}>
-                                        저장
-                                    </CommentEditBtn>
-                                    <button onClick={() => handleCommentEditToggle(comment.id)}>취소</button>
-                                </div>
+                                <span>{comment.authorName}</span>
+                                <span>
+                                    {new Intl.DateTimeFormat('ko-KR', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false,
+                                    }).format(comment.createdAt.toDate())}
+                                </span>
                             </div>
+                        </CommentHeader>
+                        {comment.editMode ? (
+                            <CommentBody>
+                                {currentUser && currentUser.uid === comment.authorId && (
+                                    <div>
+                                        <textarea
+                                            value={comment.newContent}
+                                            onChange={(e) =>
+                                                setComments((prevComments) =>
+                                                    prevComments.map((prevComment) =>
+                                                        prevComment.id === comment.id
+                                                            ? { ...prevComment, newContent: e.target.value }
+                                                            : prevComment
+                                                    )
+                                                )
+                                            }
+                                            rows={3}
+                                        />
+                                        <div>
+                                            <CommentEditBtn onClick={() => handleCommentEdit(comment.id, comment.newContent)}>
+                                                저장
+                                            </CommentEditBtn>
+                                            <button onClick={() => handleCommentEditToggle(comment.id)}>취소</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </CommentBody>
+                        ) : (
+                            <CommentBody>{comment.content}</CommentBody>
                         )}
-                    </CommentBody>
-                ) : (
-                    <CommentBody>{comment.content}</CommentBody>
-                )}
-                <CommentActions>
-                    {currentUser && (currentUser.uid === comment.authorId || userType === 0) && (
-                        <>
-                            <CommentEditBtn editMode={comment.editMode} onClick={() => handleCommentEditToggle(comment.id)}>수정</CommentEditBtn>
-                            <button onClick={() => handleCommentDelete(comment.id)}>삭제</button>
-                        </>
-                    )}
-                </CommentActions>
-            </Comment>
-        ))}
-        </CommentsContainer>
-    </PostIdContainer>
+                        <CommentActions>
+                            {currentUser && (currentUser.uid === comment.authorId || userType === 0) && (
+                                <>
+                                    <CommentEditBtn editMode={comment.editMode} onClick={() => handleCommentEditToggle(comment.id)}>수정</CommentEditBtn>
+                                    <button onClick={() => handleCommentDelete(comment.id)}>삭제</button>
+                                </>
+                            )}
+                        </CommentActions>
+                    </Comment>
+                ))}
+            </CommentsContainer>
+        </PostIdContainer>
     );
 };
