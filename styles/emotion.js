@@ -83,6 +83,7 @@ export const Wrapper = styled.div`
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    min-width: 200px;
 `;
 
 export const Section = styled.section`
@@ -109,7 +110,6 @@ export const Title = styled.div`
 export const PostList = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
 `;
 
 export const Post = styled.div`
@@ -150,7 +150,7 @@ export const PostFooter = styled.div`
 `;
 
 export const PostImage = styled.img`
-    height: 100px;
+    height: 70px;
     object-fit: cover;
     border-radius: 10px 10px 0 0;
     cursor: pointer;
@@ -194,14 +194,13 @@ export const MenuList = styled.div`
 
 export const Menu = styled.a`
     color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
-    font-size: 15px;
+    font-size: 13px;
     cursor: pointer;
 `;
 
 export const DivisionLine = styled.div`
     border-top: 1.5px solid #444444;
-    margin: 10px auto;
-    width: 400px;        
+    margin: 10px auto;   
 `;
 
 export const OrderBy = styled.div`
@@ -1046,11 +1045,10 @@ export const ChatWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
-    height: 600px;
+    margin: 50px auto;
+    max-width: 400px;
 `;
 
 
@@ -1065,14 +1063,14 @@ export const ChatRoomWrapper = styled.div`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 50px auto;
     max-width: 400px;
-    height: 450px;
+    box-sizing: border-box;
+    height: 80vh;
 `;
 
 export const MessageListWrapper = styled.div`
     flex: 1;
     overflow-y: scroll;
     width: 100%;
-    padding: 10px;
     display: flex;
     flex-direction: column;
 `;
@@ -1081,12 +1079,14 @@ export const MessageBubble = styled.div`
     background-color: ${props => props.isSelf ? '#DCF8C6' : '#ffffff'};
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 10px;
+    font-size: 14px;
     margin-bottom: 10px;
-    max-width: 80%;
     word-wrap: break-word;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     align-self: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
+    p{
+        margin: 0;
+    }
 `;
 
 export const MessageSender = styled.div`
