@@ -1075,6 +1075,47 @@ export const MessageListWrapper = styled.div`
     flex-direction: column;
 `;
 
+export const MessageWrapper = styled.div`
+    display: flex;
+    justify-content: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
+    margin-bottom: 10px;
+`;
+
+export const MessageContent = styled.div`
+    background-color: ${props => props.isSelf ? '#DCF8C6' : '#ffffff'};
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-right: ${props => props.isSelf ? 0 : '10px'};
+    margin-left: ${props => props.isSelf ? '10px' : 0};
+    padding: 5px;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    align-self: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
+    p {
+        margin: 0;
+        padding: 5px;
+    }
+`;
+
+export const SenderInfo = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%; 
+        margin-right: 8px;
+        overflow: hidden;
+    }
+`;
+
+export const MessageTimestamp = styled.div`
+    font-size: 0.8rem;
+    color: #888888;
+`;
+
 export const MessageBubble = styled.div`
     background-color: ${props => props.isSelf ? '#DCF8C6' : '#ffffff'};
     border: 1px solid #e0e0e0;
@@ -1101,11 +1142,6 @@ export const MessageSender = styled.div`
         margin-right: 8px;
         overflow: hidden;
     }
-`;
-
-export const MessageTimestamp = styled.div`
-    font-size: 0.8rem;
-    color: #888888;
 `;
 
 export const MessageInputWrapper = styled.form`

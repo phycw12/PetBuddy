@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { collection, query, onSnapshot, addDoc, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db, auth, storage } from '../../firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
-import { ChatRoomWrapper, MessageListWrapper, MessageBubble, MessageSender, MessageTimestamp, MessageInputWrapper, MessageInput, SendMessageButton } from '../../styles/emotion';
+import { ChatRoomWrapper, MessageListWrapper, MessageWrapper, MessageContent, SenderInfo, MessageBubble, MessageSender, MessageTimestamp, MessageInputWrapper, MessageInput, SendMessageButton } from '../../styles/emotion';
 import ReactMarkdown from 'react-markdown';
 
 const defaultImageRef = ref(storage, '/petbuddy/profile.svg');
@@ -139,26 +139,24 @@ export default function ChatId() {
 
     return (
         <ChatRoomWrapper>
-            <MessageListWrapper style={{ maxHeight: '70vh', overflowY: 'scroll' }}>
+            <MessageListWrapper>
                 {messages.map((message, index) => (
-                    <div key={index} style={{ display: 'flex', justifyContent: message.senderId === currentUser?.uid ? 'flex-end' : 'flex-start', marginBottom: '10px' }}>
+                    <MessageWrapper key={index} isSelf={message.senderId === currentUser?.uid}>
                         {!message.isSelf && (
-                            <MessageSender style={{ display: 'flex', alignItems: 'center' }}>
-                                <ReactMarkdown components={components}>{`![Profile Image](${message.senderProfileImg || profileImageURL})`}</ReactMarkdown>
-                            </MessageSender>
+                            <SenderInfo>
+                                <ReactMarkdown components={components}>
+                                    {`![Profile Image](${message.senderProfileImg || profileImageURL})`}
+                                </ReactMarkdown>
+                                {/* {message.senderNickname} */}
+                            </SenderInfo>
                         )}
-                        <MessageBubble isSelf={message.senderId === currentUser?.uid}>
+                        <MessageContent isSelf={message.senderId === currentUser?.uid}>
                             <p>{message.content}</p>
-                        </MessageBubble>
+                        </MessageContent>
                         <MessageTimestamp>
                             {formatTimestamp(message.timestamp?.toDate())}
                         </MessageTimestamp>
-                        {message.senderId !== currentUser?.uid && (
-                            <MessageSender style={{ marginLeft: '8px', display: 'flex', alignItems: 'center' }}>
-                                {/* {message.senderNickname} */}
-                            </MessageSender>
-                        )}
-                    </div>
+                    </MessageWrapper>
                 ))}
                 <div ref={messagesEndRef}></div>
             </MessageListWrapper>
