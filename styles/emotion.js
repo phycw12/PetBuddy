@@ -58,7 +58,7 @@ export const LogoContainer = styled.div`
 `;
 
 export const Logo = styled.div`
-    color: #01DF01;
+    color: #90EE90; // #FE9A2E 
     font-size: 24px;
     font-weight: bold;
     padding: 10px;
@@ -67,6 +67,15 @@ export const Logo = styled.div`
 `;
 
 // index, board, notice, question, review
+
+export const MainWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: 50px;
+`;
 
 export const Wrapper = styled.div`
     display: flex;
@@ -688,6 +697,22 @@ export const CommentEditBtn = styled.button`
     visibility: ${({ editMode }) => (editMode ? 'hidden' : 'visible')};
 `;
 
+export const ChatButton = styled.button`
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+`;
+
 // postmanager
 
 export const PostManagementWrapper = styled.div`
@@ -1011,5 +1036,97 @@ export const AccountRecoveryBtn = styled.button`
 
     &:hover {
         background-color: #0058b8; /* hover 시 색상 변경 */
+    }
+`;
+
+// chat
+
+export const ChatWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    height: 600px;
+`;
+
+
+// chatRoom
+
+export const ChatRoomWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 50px auto;
+    max-width: 400px;
+    height: 450px;
+`;
+
+export const MessageListWrapper = styled.div`
+    flex: 1;
+    overflow-y: scroll;
+    width: 100%;
+    padding: 10px;
+`;
+
+export const MessageBubble = styled.div`
+    background-color: ${props => props.isSelf ? '#DCF8C6' : '#ffffff'};
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    align-self: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
+`;
+
+export const MessageSender = styled.div`
+    font-weight: bold;
+    margin-bottom: 5px;
+`;
+
+export const MessageTimestamp = styled.div`
+    font-size: 0.8rem;
+    color: #888888;
+`;
+
+export const MessageInputWrapper = styled.form`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+`;
+
+export const MessageInput = styled.input`
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 1rem;
+`;
+
+export const SendMessageButton = styled.button`
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    &:hover {
+        background-color: #45a049;
     }
 `;

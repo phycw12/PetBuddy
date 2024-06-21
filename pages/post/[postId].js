@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { db, auth, storage } from '../../firebase';
-import { doc, getDoc, getDocs, updateDoc, deleteDoc, collection, addDoc, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, getDocs, onSnapshot, orderBy } from 'firebase/firestore';
 import { ref, deleteObject } from "firebase/storage";
-import { onAuthStateChanged } from 'firebase/auth';
 import ReactMarkdown from 'react-markdown';
-import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn } from '../../styles/emotion';
+import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn, ChatButton } from '../../styles/emotion';
 
 export default function Post() {
     const router = useRouter();
@@ -18,7 +17,7 @@ export default function Post() {
     const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 setCurrentUser(user);
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
@@ -44,7 +43,7 @@ export default function Post() {
                     setPost(postData);
                     // 조회수 증가 처리
                     await updateDoc(docRef, {
-                        views: postData.views + 1
+                        views: postData.views + 1,
                     });
                 } else {
                     console.log('No such document!');
@@ -69,10 +68,7 @@ export default function Post() {
         if (postId) {
             const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
             if (confirmDelete) {
-                // 게시글 참조
                 const postRef = doc(db, 'posts', postId);
-
-                // 게시글 데이터 가져오기
                 const postSnapshot = await getDoc(postRef);
                 if (postSnapshot.exists()) {
                     const postData = postSnapshot.data();
@@ -143,7 +139,7 @@ export default function Post() {
                 authorId: currentUser.uid,
                 authorName: userData.nickname, // 사용자의 닉네임 가져오기
                 content: newComment,
-                createdAt: new Date()
+                createdAt: new Date(),
             };
             // Firestore에 댓글 추가
             const commentRef = await addDoc(collection(db, 'comments'), commentData);
@@ -173,9 +169,9 @@ export default function Post() {
                     ? {
                         ...comment,
                         editMode: !comment.editMode,
-                        newContent: comment.editMode ? '' : comment.content // Reset newContent if toggling back to false
+                        newContent: comment.editMode ? '' : comment.content, // Reset newContent if toggling back to false
                     }
-                    : comment
+                : comment
             )
         );
     };
@@ -185,7 +181,7 @@ export default function Post() {
             const commentRef = doc(db, 'comments', commentId);
             await updateDoc(commentRef, {
                 content: newContent,
-                editedAt: new Date()
+                editedAt: new Date(),
             });
             setComments((prevComments) =>
                 prevComments.map((comment) =>
@@ -196,7 +192,7 @@ export default function Post() {
             // 수정 후 필요한 작업 추가
         } catch (error) {
             console.error('Error updating document: ', error);
-        };
+        }
     };
 
     const handleCommentDelete = async (commentId) => {
@@ -210,6 +206,37 @@ export default function Post() {
             }
         } catch (error) {
             console.error('Error deleting document: ', error);
+        }
+    };
+
+    const handleChatButtonClick = async (authorId) => {
+        try {
+            // 현재 사용자의 닉네임을 Firestore에서 가져옴
+            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+            let currentUserNickname = currentUser.displayName;
+
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                currentUserNickname = userData.nickname;
+            }
+
+            // Firestore에 새로운 채팅방 추가
+            const chatRoomRef = await addDoc(collection(db, 'chatRooms'), {
+                participants: [
+                    { uid: currentUser.uid, nickname: currentUserNickname },
+                    { uid: post.authorId, nickname: post.authorNickname },
+                    // 다른 참가자 정보 추가 가능
+                ],
+                createdAt: new Date(),
+                // messages: [], // 채팅 메시지들을 저장할 배열 필드
+            });
+    
+            // 채팅방의 ID를 가져와 페이지 이동
+            const chatRoomId = chatRoomRef.id;
+            router.push(`/chat/${chatRoomId}`);
+        } catch (error) {
+            console.error('Error creating chat room:', error);
+            // 오류 처리
         }
     };
 
@@ -242,7 +269,12 @@ export default function Post() {
             <PostIdButton onClick={handleGoBack}>뒤로가기</PostIdButton>
             <MetaInfo>
                 <span>카테고리 : {post.category}</span>
-                <span>작성자 : {post.authorNickname}</span>
+                <span>
+                    작성자 :{' '}
+                    <button onClick={() => handleChatButtonClick(post.authorId)}>
+                        {post.authorNickname}
+                    </button>
+                </span>
                 <span>조회수 : {post.views + 1}</span>
                 <span>
                     작성일 :{' '}
