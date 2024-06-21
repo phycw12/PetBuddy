@@ -1059,7 +1059,6 @@ export const ChatWrapper = styled.div`
 export const ChatRoomWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 20px;
     background-color: #f2f2f2;
     border-radius: 8px;
@@ -1074,6 +1073,8 @@ export const MessageListWrapper = styled.div`
     overflow-y: scroll;
     width: 100%;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
 `;
 
 export const MessageBubble = styled.div`

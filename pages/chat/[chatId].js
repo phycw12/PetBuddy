@@ -50,11 +50,11 @@ export default function ChatId() {
         if (!newMessage.trim()) return;
 
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-            let currentUserNickname = currentUser.displayName;
+        let currentUserNickname = currentUser.displayName;
 
-            if (userDoc.exists()) {
-                const userData = userDoc.data();
-                currentUserNickname = userData.nickname;
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            currentUserNickname = userData.nickname;
         }
 
         const messageData = {
@@ -89,7 +89,7 @@ export default function ChatId() {
         <ChatRoomWrapper>
             <MessageListWrapper style={{ maxHeight: '70vh', overflowY: 'scroll' }}>
                 {messages.map((message, index) => (
-                    <MessageBubble key={index}>
+                    <MessageBubble key={index} isSelf={message.senderId === currentUser?.uid}>
                         <MessageSender>{message.senderNickname}</MessageSender>
                         <p>{message.content}</p>
                         <MessageTimestamp>
