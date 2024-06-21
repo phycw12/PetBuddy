@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { collection, query, onSnapshot, addDoc, orderBy, doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '../../firebase';
+import { db, auth, storage } from '../../firebase';
+import { ref, getDownloadURL } from 'firebase/storage';
 import { ChatRoomWrapper, MessageListWrapper, MessageBubble, MessageSender, MessageTimestamp, MessageInputWrapper, MessageInput, SendMessageButton } from '../../styles/emotion';
+import ReactMarkdown from 'react-markdown';
+
+const defaultImageRef = ref(storage, '/petbuddy/profile.svg');
 
 export default function ChatId() {
     const router = useRouter();
@@ -10,7 +14,7 @@ export default function ChatId() {
     const [messages, setMessages] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
     const [newMessage, setNewMessage] = useState('');
-
+    const [profileImageURL, setProfileImageURL] = useState('');
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -26,18 +30,48 @@ export default function ChatId() {
     }, []);
 
     useEffect(() => {
+        if (!currentUser) return;
+
+        const fetchProfileImage = async () => {
+            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                if (userData.profileImg) {
+                    setProfileImageURL(userData.profileImg);
+                } else {
+                    // 프로필 이미지가 없을 경우 기본 이미지 가져오기
+                    try {
+                        const defaultImageURL = await getDownloadURL(defaultImageRef);
+                        setProfileImageURL(defaultImageURL);
+                    } catch (error) {
+                        console.error('Error fetching default profile image: ', error);
+                    }
+                }
+            }
+        };
+
+        fetchProfileImage();
+    }, [currentUser]);
+
+    useEffect(() => {
         if (!chatId) return; // chatId가 없으면 실행하지 않음
 
-        console.log("db:", db);
-        console.log("chatId:", chatId);
         const q = query(collection(db, 'chatRooms', chatId, 'messages'), orderBy('timestamp', 'asc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const messagesData = snapshot.docs.map((doc) => doc.data());
             setMessages(messagesData);
             scrollToBottom();
         });
+
         return () => unsubscribe();
     }, [chatId]);
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -51,10 +85,12 @@ export default function ChatId() {
 
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
         let currentUserNickname = currentUser.displayName;
+        let currentUserProfileImg = profileImageURL; // 기본 이미지 URL 설정
 
         if (userDoc.exists()) {
             const userData = userDoc.data();
             currentUserNickname = userData.nickname;
+            currentUserProfileImg = userData.profileImg || profileImageURL; // 프로필 이미지가 없으면 기본 이미지 URL 사용
         }
 
         const messageData = {
@@ -62,6 +98,7 @@ export default function ChatId() {
             senderId: currentUser.uid,
             senderEmail: currentUser.email,
             senderNickname: currentUserNickname,
+            senderProfileImg: currentUserProfileImg,
             timestamp: new Date(),
         };
 
@@ -81,21 +118,47 @@ export default function ChatId() {
         }
     };
 
+    const formatTimestamp = (timestamp) => {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
+        const year = date.getFullYear().toString().slice(-2); // 년도 뒤 2자리
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월을 2자리로
+        const day = date.getDate().toString().padStart(2, '0'); // 일을 2자리로
+        const hours = date.getHours().toString().padStart(2, '0'); // 시간을 2자리로
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // 분을 2자리로
+        return `${year}.${month}.${day} ${hours}:${minutes}`;
+    };
+
+    const components = {
+        img: ({ src, alt }) => <img src={src} alt={alt} style={{ maxWidth: '50px', maxHeight: '50px', borderRadius: '50%' }} />
+    };
+
     if (!chatId) {
         return <div>Loading...</div>; // chatId가 없을 때 로딩 상태를 표시
     }
-    
+
     return (
         <ChatRoomWrapper>
             <MessageListWrapper style={{ maxHeight: '70vh', overflowY: 'scroll' }}>
                 {messages.map((message, index) => (
-                    <MessageBubble key={index} isSelf={message.senderId === currentUser?.uid}>
-                        <MessageSender>{message.senderNickname}</MessageSender>
-                        <p>{message.content}</p>
+                    <div key={index} style={{ display: 'flex', justifyContent: message.senderId === currentUser?.uid ? 'flex-end' : 'flex-start', marginBottom: '10px' }}>
+                        {!message.isSelf && (
+                            <MessageSender style={{ display: 'flex', alignItems: 'center' }}>
+                                <ReactMarkdown components={components}>{`![Profile Image](${message.senderProfileImg || profileImageURL})`}</ReactMarkdown>
+                            </MessageSender>
+                        )}
+                        <MessageBubble isSelf={message.senderId === currentUser?.uid}>
+                            <p>{message.content}</p>
+                        </MessageBubble>
                         <MessageTimestamp>
-                            {new Date(message.timestamp?.toDate()).toLocaleString()}
+                            {formatTimestamp(message.timestamp?.toDate())}
                         </MessageTimestamp>
-                    </MessageBubble>
+                        {message.senderId !== currentUser?.uid && (
+                            <MessageSender style={{ marginLeft: '8px', display: 'flex', alignItems: 'center' }}>
+                                {/* {message.senderNickname} */}
+                            </MessageSender>
+                        )}
+                    </div>
                 ))}
                 <div ref={messagesEndRef}></div>
             </MessageListWrapper>

@@ -1081,17 +1081,26 @@ export const MessageBubble = styled.div`
     border-radius: 8px;
     font-size: 14px;
     margin-bottom: 10px;
+    padding: 5px;
     word-wrap: break-word;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     align-self: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
     p{
         margin: 0;
+        padding: 5px;
     }
 `;
 
 export const MessageSender = styled.div`
     font-weight: bold;
     margin-bottom: 5px;
+    img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%; 
+        margin-right: 8px;
+        overflow: hidden;
+    }
 `;
 
 export const MessageTimestamp = styled.div`
@@ -1106,7 +1115,7 @@ export const MessageInputWrapper = styled.form`
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 10px;
+    padding: 2px;
     margin-top: 10px;
 `;
 
