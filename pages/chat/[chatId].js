@@ -136,7 +136,7 @@ export default function ChatId() {
     };
 
     const components = {
-        img: ({ src, alt }) => <img src={src} alt={alt} style={{ maxWidth: '50px', maxHeight: '50px', borderRadius: '50%' }} />
+        img: ({ src, alt }) => <img src={src} alt={alt} style={{ maxWidth: '50px', maxHeight: '50px', borderRadius: '50%', marginTop: '-20px' }} />
     };
 
     if (!chatId) {

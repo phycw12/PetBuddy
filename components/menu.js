@@ -38,13 +38,22 @@ export default function Menu() {
       fetchImages();
   }, [storage]);
 
-    const handleWriteClick = () => {
+    const handleMypageClick = () => {
       if (user) {
           router.push('/mypage');
       } else {
           alert('로그인이 필요합니다.');
           router.push('/login');
       }
+  };
+
+  const handleChatClick = () => {
+    if (user) {
+        router.push('/chat');
+    } else {
+        alert('로그인이 필요합니다.');
+        router.push('/login');
+    }
   };
 
   if (loading) {
@@ -67,15 +76,13 @@ export default function Menu() {
                     <MenuText>게시판</MenuText>
                 </MenuItem>
             </Link>
-            <Link href="/chat" style={{ textDecoration: "none"}}>
-              <MenuItem>
-                    <MenuIcon src={chatImageURL} alt="Chat"/>
-                    <MenuText>채팅</MenuText>
-              </MenuItem>
-            </Link>
-            <MenuItem onClick={handleWriteClick}>
-                    <MenuIcon src={mypageImageURL} alt="Profile"/>
-                    <MenuText>마이페이지</MenuText>
+            <MenuItem onClick={handleChatClick}>
+              <MenuIcon src={chatImageURL} alt="Chat"/>
+              <MenuText>채팅</MenuText>
+            </MenuItem>
+            <MenuItem onClick={handleMypageClick}>
+              <MenuIcon src={mypageImageURL} alt="Profile"/>
+              <MenuText>마이페이지</MenuText>
             </MenuItem>
           </FixedNav>
       </NavContainer>

@@ -87,13 +87,21 @@ export const WritePage = styled.img`
 // back
 
 export const Back = styled.div`
-    
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* 다른 요소 위에 위치하도록 z-index 설정 */
+    margin: 20px; /* 여백 설정 */
+    cursor: pointer;
 `;
 
-export const BackImg = styled.div`
-    
+export const BackImg = styled.img`
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 `;
-
 
 // index, board, notice, question, review
 
@@ -920,7 +928,6 @@ export const FindWrapper = styled.div`
     background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
     height: 500px;
 `;
 
@@ -1114,13 +1121,6 @@ export const SenderInfo = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 5px;
-    img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%; 
-        margin-right: 8px;
-        overflow: hidden;
-    }
 `;
 
 export const MessageTimestamp = styled.div`
