@@ -5,6 +5,7 @@ import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { MainWrapper, Section, Section2, Title, TitleHeader, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
+import LogoTitle from '@/components/logo';
 import WriteBtn from '@/components/writebtn';
 import SearchIcon from '@/components/search';
 
@@ -78,6 +79,7 @@ export default function Main(){
 
     return (
         <>
+            <LogoTitle/>
             <MainWrapper>
                 <Section>
                     <Title>인기글</Title>

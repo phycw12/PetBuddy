@@ -66,6 +66,35 @@ export const Logo = styled.div`
     font-family: 'Inria Sans', sans-serif;
 `;
 
+// search
+
+export const Search = styled.img`
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+    cursor: pointer;
+`;
+
+// writebtn
+
+export const WritePage = styled.img`
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+`;
+
+// back
+
+export const Back = styled.div`
+    
+`;
+
+export const BackImg = styled.div`
+    
+`;
+
+
 // index, board, notice, question, review
 
 export const MainWrapper = styled.div`
@@ -162,31 +191,13 @@ export const TitleHeader = styled.div`
     justify-content: flex-end;
 `;
 
-// search
-
-export const Search = styled.img`
-    width: 24px;
-    height: 24px;
-    margin-left: 10px;
-    cursor: pointer;
-`;
-
-// writebtn
-
-export const WritePage = styled.img`
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-`;
-
 // freeboard, notice, question, review
 
 export const MenuList = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 50px 0 10px 0;
+    margin: 0;
     font-weight: bold;
     text-decoration: none;
     /* color: #A4A4A4; */
@@ -1061,10 +1072,10 @@ export const ChatRoomWrapper = styled.div`
     background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 50px auto;
+    margin: 0 auto;
     max-width: 400px;
     box-sizing: border-box;
-    height: 80vh;
+    height: 90vh;
 `;
 
 export const MessageListWrapper = styled.div`
@@ -1078,6 +1089,7 @@ export const MessageListWrapper = styled.div`
 export const MessageWrapper = styled.div`
     display: flex;
     justify-content: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
+    align-items: ${props => props.isSelf ? 'flex-end' : 'center'};
     margin-bottom: 10px;
 `;
 
@@ -1086,8 +1098,8 @@ export const MessageContent = styled.div`
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     font-size: 14px;
-    margin-right: ${props => props.isSelf ? 0 : '10px'};
-    margin-left: ${props => props.isSelf ? '10px' : 0};
+    /* margin-right: ${props => props.isSelf ? 0 : '10px'};
+    margin-left: ${props => props.isSelf ? '10px' : 0}; */
     padding: 5px;
     word-wrap: break-word;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -1112,8 +1124,10 @@ export const SenderInfo = styled.div`
 `;
 
 export const MessageTimestamp = styled.div`
-    font-size: 0.8rem;
+    font-size: 12px;
     color: #888888;
+    margin-right: ${props => props.isSelf ? '5px' : '0'};
+    margin-left: ${props => props.isSelf ? '0' : '5px'};
 `;
 
 export const MessageBubble = styled.div`
@@ -1175,4 +1189,12 @@ export const SendMessageButton = styled.button`
     &:hover {
         background-color: #45a049;
     }
+`;
+
+export const DateSeparator = styled.div`
+    text-align: center;
+    margin: 20px 0;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    font-size: 12px;
 `;

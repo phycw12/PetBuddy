@@ -211,15 +211,20 @@ export default function Post() {
 
     const handleChatButtonClick = async (authorId) => {
         try {
+            if (currentUser.uid === authorId) {
+                alert('자기 자신과는 채팅방을 만들 수 없습니다.');
+                return;
+            }
+    
             // 현재 사용자의 닉네임을 Firestore에서 가져옴
             const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
             let currentUserNickname = currentUser.displayName;
-
+    
             if (userDoc.exists()) {
                 const userData = userDoc.data();
                 currentUserNickname = userData.nickname;
             }
-
+    
             // Firestore에 새로운 채팅방 추가
             const chatRoomRef = await addDoc(collection(db, 'chatRooms'), {
                 participants: [

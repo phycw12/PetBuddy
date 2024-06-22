@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { collection, query, onSnapshot, addDoc, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db, auth, storage } from '../../firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
-import { ChatRoomWrapper, MessageListWrapper, MessageWrapper, MessageContent, SenderInfo, MessageBubble, MessageSender, MessageTimestamp, MessageInputWrapper, MessageInput, SendMessageButton } from '../../styles/emotion';
+import { ChatRoomWrapper, MessageListWrapper, MessageWrapper, MessageContent, SenderInfo, MessageTimestamp, MessageInputWrapper, MessageInput, SendMessageButton, DateSeparator } from '../../styles/emotion';
 import ReactMarkdown from 'react-markdown';
 
 const defaultImageRef = ref(storage, '/petbuddy/profile.svg');
@@ -118,15 +118,21 @@ export default function ChatId() {
         }
     };
 
-    const formatTimestamp = (timestamp) => {
+    const formatToday = (timestamp) => {
         if (!timestamp) return '';
         const date = new Date(timestamp);
-        const year = date.getFullYear().toString().slice(-2); // 년도 뒤 2자리
+        const year = date.getFullYear().toString(); // 년도 4자리
         const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월을 2자리로
         const day = date.getDate().toString().padStart(2, '0'); // 일을 2자리로
+        return `${year}년 ${month}월 ${day}일`;
+    };
+
+    const formatTime = (timestamp) => {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
         const hours = date.getHours().toString().padStart(2, '0'); // 시간을 2자리로
         const minutes = date.getMinutes().toString().padStart(2, '0'); // 분을 2자리로
-        return `${year}.${month}.${day} ${hours}:${minutes}`;
+        return `${hours}:${minutes}`;
     };
 
     const components = {
@@ -137,38 +143,63 @@ export default function ChatId() {
         return <div>Loading...</div>; // chatId가 없을 때 로딩 상태를 표시
     }
 
+    let previousDate = '';
+
     return (
         <ChatRoomWrapper>
-            <MessageListWrapper>
-                {messages.map((message, index) => (
-                    <MessageWrapper key={index} isSelf={message.senderId === currentUser?.uid}>
-                        {!message.isSelf && (
-                            <SenderInfo>
-                                <ReactMarkdown components={components}>
-                                    {`![Profile Image](${message.senderProfileImg || profileImageURL})`}
-                                </ReactMarkdown>
-                                {/* {message.senderNickname} */}
-                            </SenderInfo>
+        <MessageListWrapper>
+            {messages.map((message, index) => {
+                const messageDate = formatToday(message.timestamp?.toDate());
+                const showDate = messageDate !== previousDate;
+                previousDate = messageDate;
+                const isSelf = message.senderId === currentUser?.uid;
+
+                return (
+                    <div key={index}>
+                        {showDate && (
+                            <DateSeparator>
+                                {messageDate}
+                            </DateSeparator>
                         )}
-                        <MessageContent isSelf={message.senderId === currentUser?.uid}>
-                            <p>{message.content}</p>
-                        </MessageContent>
-                        <MessageTimestamp>
-                            {formatTimestamp(message.timestamp?.toDate())}
-                        </MessageTimestamp>
-                    </MessageWrapper>
-                ))}
-                <div ref={messagesEndRef}></div>
-            </MessageListWrapper>
-            <MessageInputWrapper onSubmit={handleSendMessage}>
-                <MessageInput
-                    type="text"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="메시지를 입력하세요..."
-                />
-                <SendMessageButton type="submit">보내기</SendMessageButton>
-            </MessageInputWrapper>
-        </ChatRoomWrapper>
+
+                        {isSelf ? (
+                            <MessageWrapper isSelf>
+                                <MessageTimestamp isSelf>
+                                    {formatTime(message.timestamp?.toDate())}
+                                </MessageTimestamp>
+                                <MessageContent>
+                                    <p>{message.content}</p>
+                                </MessageContent>
+                            </MessageWrapper>
+                        ) : (
+                            <MessageWrapper>
+                                <SenderInfo>
+                                    <ReactMarkdown components={components}>
+                                        {`![Profile Image](${message.senderProfileImg || profileImageURL})`}
+                                    </ReactMarkdown>
+                                </SenderInfo>
+                                <MessageContent>
+                                    <p>{message.content}</p>
+                                </MessageContent>
+                                <MessageTimestamp>
+                                    {formatTime(message.timestamp?.toDate())}
+                                </MessageTimestamp>
+                            </MessageWrapper>
+                        )}
+                    </div>
+                );
+            })}
+            <div ref={messagesEndRef}></div>
+        </MessageListWrapper>
+        <MessageInputWrapper onSubmit={handleSendMessage}>
+            <MessageInput
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="메시지를 입력하세요..."
+            />
+            <SendMessageButton type="submit">보내기</SendMessageButton>
+        </MessageInputWrapper>
+    </ChatRoomWrapper>
     );
 };
