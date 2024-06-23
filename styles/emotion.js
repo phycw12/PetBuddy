@@ -75,6 +75,32 @@ export const Search = styled.img`
     cursor: pointer;
 `;
 
+export const TitleHeader = styled.div`
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin: 10px auto;
+    cursor: pointer;
+    .searchIcon{
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: #999;
+    }
+`;
+
+export const SearchInput = styled.input`
+    width: 100%;
+    padding: 10px;
+    background-color: #E3E3E3;
+    border: none;
+    border-radius: 4px;
+    pointer-events: none; /* input 비활성화 */
+    box-sizing: border-box;
+`;
+
 // writebtn
 
 export const WritePage = styled.img`
@@ -105,127 +131,127 @@ export const BackImg = styled.img`
 
 // index, board
 
-export const MainWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    margin-top: 50px;
-`;
-
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
-    min-width: 200px;
+    min-width: 300px;
 `;
 
 export const Section = styled.section`
     width: 100%;
-    max-width: 410px;
-    margin: 0px 80px 20px 80px;
-    box-sizing: border-box;
-`;
-
-export const Section2 = styled.section`
-    width: 100%;
-    max-width: 410px;
-    margin: 0px 100px 80px 100px;
-    box-sizing: border-box;
-`;
-
-export const Title = styled.div`
-    font-size: 15px;
-    font-weight: bold;
+    max-width: 600px;
     margin: 20px auto;
-    color: #3D3D3D;
+    box-sizing: border-box;
 `;
 
 export const PostList = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 `;
 
 export const Post = styled.div`
+    width: 100%;
+    margin-bottom: 20px;
     border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+`;
+
+export const PostTitle = styled.h3`
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+`;
+
+export const PostAuthor = styled.p`
+    font-size: 14px;
+    color: #777777;
+`;
+
+export const PostContent = styled.div`
+    padding: 15px;
+`;
+
+export const PostText = styled.p`
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333333;
+`;
+
+export const CommentSection = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+`;
+
+export const CommentIcon = styled.span`
+    color: #999999;
+    font-size: 14px;
+`;
+
+export const CommentCount = styled.span`
+    font-size: 12px;
+    color: #999999;
+`;
+
+// index
+
+export const MainWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
+    box-sizing: border-box;
+    min-width: 300px;
+`;
+
+export const Section2 = styled(Section)``;
+
+export const Title = styled.h2`
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
     text-align: center;
 `;
 
 export const PostTitleImg = styled.div`
-    margin-bottom: 5px;
-`;
-
-export const PostTitle = styled.div`
-    height: 30%;
-    font-size: 13px;
-    font-weight: bold;
-    padding-top: 15px;
-    cursor: pointer;
-`;
-
-export const PostDate = styled.div`
     display: flex;
-    font-size: 10px;
-    color: #373737;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 `;
 
-export const PostAuthor = styled.div`
-    display: flex;
-    font-size: 10px;
-    color: #373737;
+export const PostImage = styled.img`
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+`;
+
+export const PostDate = styled.p`
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 10px;
 `;
 
 export const PostFooter = styled.div`
     display: flex;
     justify-content: space-between;
-    font-size: 10px;
-    color: #373737;
-`;
-
-export const PostImage = styled.img`
-    height: 70px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
-    cursor: pointer;
-`
-
-export const TitleHeader = styled.div`
-    position: relative;
-    display: inline-block;
-    width: 100%;
-    margin: 10px auto;
-    cursor: pointer;
-    .searchIcon{
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        font-size: 16px;
-        color: #999;
-    }
-`;
-
-export const SearchInput = styled.input`
-    width: 100%;
-    padding: 10px;
-    background-color: #E3E3E3;
-    border: none;
-    border-radius: 4px;
-    pointer-events: none; /* input 비활성화 */
-    box-sizing: border-box;
+    font-size: 12px;
+    color: #999999;
+    padding: 10px 15px;
 `;
 
 // board
 
-export const BoardSection = styled.section`
-    width: 100%;
-    max-width: 410px;
-    margin: 10px 80px 20px 80px;
-    box-sizing: border-box;
+export const BoardSection = styled(Section)`
+    margin: 10px auto;
 `;
 
 export const MenuList = styled.div`
@@ -234,12 +260,11 @@ export const MenuList = styled.div`
     justify-content: flex-end;
     font-weight: bold;
     text-decoration: none;
-    margin-top: -15px;
-    margin-bottom: 5px;
+    margin: 5px auto;
 `;
 
 export const Menu = styled.a`
-    color: ${({ isActive }) => (isActive ? '#424242' : '#A4A4A4')};
+    color: ${({ isActive }) => (isActive ? '#E800AD' : '#A4A4A4')};
     font-size: 12px;
     margin-left: 5px;
     cursor: pointer;
@@ -250,23 +275,23 @@ export const Menu = styled.a`
     &::after {
         content: '';
         position: absolute;
-        bottom: -3px; /* 밑줄 위치 조절 */
+        bottom: -3px;
         left: 0;
         width: 100%;
-        height: 1px; /* 밑줄 높이 */
+        height: 1px;
         background-color: ${({ isActive }) => (isActive ? '#E800AD' : 'transparent')};
         transition: background-color 0.3s ease, width 0.3s ease;
     }
 
     &:hover::after {
         background-color: #E800AD;
-        width: 100%; /* hover 시 밑줄 너비 전체로 */
+        width: 100%;
     }
 `;
 
 export const DivisionLine = styled.div`
     border-top: 1.5px solid #444444;
-    margin: 10px auto;   
+    margin: 10px auto;
 `;
 
 export const OrderBy = styled.div`

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { db } from '../../firebase';
-import { Wrapper, TitleHeader, BoardSection, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../../styles/emotion';
+import { Wrapper, TitleHeader, BoardSection, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitle, PostContent, PostText, PostAuthor, PostImage, CommentSection, CommentIcon, CommentCount} from '../../styles/emotion';
 import WriteBtn from '@/components/writebtn';
 import SearchIcon from '@/components/search';
 import Loading from '@/components/loading';
@@ -16,6 +16,9 @@ export default function FreeBoard() {
     const [sortOrder, setSortOrder] = useState('createdAt');
     const [basicImageUrl, setBasicImageUrl] = useState('');
     const [loading, setLoading] = useState(true);
+    const [visiblePosts, setVisiblePosts] = useState(5); // 초기에 보여질 게시물 수
+    const [nextLoadIndex, setNextLoadIndex] = useState(5); // 다음에 로드할 게시물의 시작 인덱스
+    const [loadingMore, setLoadingMore] = useState(false);
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -49,6 +52,52 @@ export default function FreeBoard() {
         fetchRecentPosts();
     }, [sortOrder, activeMenu]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (
+                window.innerHeight + document.documentElement.scrollTop
+                === document.documentElement.offsetHeight
+            ) {
+                // 사용자가 스크롤을 끝까지 내림
+                const newVisiblePosts = visiblePosts + 5; // 추가로 보일 게시물 수
+                if (newVisiblePosts <= recentPosts.length) {
+                    setVisiblePosts(newVisiblePosts);
+                }
+            }
+        };
+    
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [visiblePosts, recentPosts]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (
+                !loadingMore &&
+                window.innerHeight + document.documentElement.scrollTop
+                === document.documentElement.offsetHeight
+            ) {
+                setLoadingMore(true);
+                const newVisiblePosts = visiblePosts + 5;
+                if (newVisiblePosts <= recentPosts.length) {
+                    setTimeout(() => {
+                        setVisiblePosts(newVisiblePosts);
+                        setLoadingMore(false);
+                    }, 1000); // 예시로 1초 후에 로딩 상태 해제
+                } else {
+                    setLoadingMore(false);
+                }
+            }
+        };
+    
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [visiblePosts, recentPosts, loadingMore]);
+
     const handleMenuClick = (menu) => {
         setActiveMenu(menu);
     };
@@ -70,43 +119,33 @@ export default function FreeBoard() {
     return (
         <Wrapper>
             <BoardSection>
-                
+                <SearchIcon/>
                 <MenuList>
-                    <Menu isActive={activeMenu === 'freeboard'} onClick={() => handleMenuClick('freeboard')}>자유게시판</Menu>
+                    <Menu isActive={activeMenu === 'freeboard'} onClick={() => handleMenuClick('freeboard')}>멍냥멍냥</Menu>
                     <Menu isActive={activeMenu === 'notice'} onClick={() => handleMenuClick('notice')}>공지사항</Menu>
                     <Menu isActive={activeMenu === 'question'} onClick={() => handleMenuClick('question')}>궁금해요</Menu>
                     <Menu isActive={activeMenu === 'review'} onClick={() => handleMenuClick('review')}>사용후기</Menu>
                 </MenuList>
-                <SearchIcon/>
                 <OrderBy>
                     <OrderByList isActive={sortOrder === 'createdAt'} onClick={() => handleSortOrderChange('createdAt')}>최신순</OrderByList>
-                    <OrderByList isActive={sortOrder === 'views'} onClick={() => handleSortOrderChange('views')}>조회순</OrderByList>
+                    <OrderByList isActive={sortOrder === 'views'} onClick={() => handleSortOrderChange('views')}>인기순</OrderByList>
                 </OrderBy>
                 <TitleHeader>
                     <WriteBtn />
                 </TitleHeader>
                 <PostList>
-                    {recentPosts.map((post, index) => (
-                        <Post key={index}>
-                            <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                <PostImage src={basicImageUrl} alt={post.title} />
+                    {recentPosts.slice(0, visiblePosts).map((post, index) => (
+                        <Post key={index} onClick={() => handlePostClick(post.id)}>
+                            <PostImage src={basicImageUrl} alt={post.title}/>
+                            <PostContent>
                                 <PostTitle>{post.title}</PostTitle>
-                            </PostTitleImg>
-                            <PostAuthor>{post.authorNickname}</PostAuthor>
-                            <PostDate>
-                                {new Intl.DateTimeFormat('ko-KR', {
-                                    year: 'numeric',
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false,
-                                }).format(post.createdAt.toDate())}
-                            </PostDate>
-                            <PostFooter>
-                                <span>조회수 {post.views}</span>
-                                <span>♡</span>
-                            </PostFooter>
+                                <PostAuthor>{post.authorNickname}</PostAuthor>
+                                <PostText>{post.content}</PostText>
+                            </PostContent>
+                            <CommentSection>
+                                <CommentIcon>💬</CommentIcon>
+                                <CommentCount>댓글수</CommentCount>
+                            </CommentSection>
                         </Post>
                     ))}
                 </PostList>

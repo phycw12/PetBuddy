@@ -79,44 +79,16 @@ export default function Main(){
 
     return (
         <>
-            <LogoTitle/>
+            <LogoTitle />
             <MainWrapper>
                 <Section>
-                    <SearchIcon/>
+                    <SearchIcon />
                     <Title>인기글</Title>
-                <PostList>
-                    {popularPosts.map((post, index) => (
-                        <Post key={index}>
-                            <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                <PostImage src={basicImageUrl} alt={post.title}/>
-                                <PostTitle>{post.title}</PostTitle>
-                            </PostTitleImg>
-                            <PostAuthor>{post.authorNickname}</PostAuthor>
-                            <PostDate>
-                                {new Intl.DateTimeFormat('ko-KR', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: false,
-                            }).format(post.createdAt.toDate())}
-                            </PostDate>
-                            <PostFooter>
-                                <span>조회수 {post.views}</span>
-                                <span>♡ {post.heart}</span>
-                            </PostFooter>
-                        </Post>
-                    ))}
-                </PostList>
-                </Section>
-                <Section2>
-                   <Title>최신글</Title>
                     <PostList>
-                        {recentPosts.map((post, index) => (
+                        {popularPosts.map((post, index) => (
                             <Post key={index}>
                                 <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                    <PostImage src={basicImageUrl} alt={post.title}/>
+                                    <PostImage src={basicImageUrl} alt={post.title} />
                                     <PostTitle>{post.title}</PostTitle>
                                 </PostTitleImg>
                                 <PostAuthor>{post.authorNickname}</PostAuthor>
@@ -132,7 +104,35 @@ export default function Main(){
                                 </PostDate>
                                 <PostFooter>
                                     <span>조회수 {post.views}</span>
-                                    <span>♡</span>
+                                    <span>♡ {post.heart}</span>
+                                </PostFooter>
+                            </Post>
+                        ))}
+                    </PostList>
+                </Section>
+                <Section2>
+                    <Title>최신글</Title>
+                    <PostList>
+                        {recentPosts.map((post, index) => (
+                            <Post key={index}>
+                                <PostTitleImg onClick={() => handlePostClick(post.id)}>
+                                    <PostImage src={basicImageUrl} alt={post.title} />
+                                    <PostTitle>{post.title}</PostTitle>
+                                </PostTitleImg>
+                                <PostAuthor>{post.authorNickname}</PostAuthor>
+                                <PostDate>
+                                    {new Intl.DateTimeFormat('ko-KR', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false,
+                                    }).format(post.createdAt.toDate())}
+                                </PostDate>
+                                <PostFooter>
+                                    <span>조회수 {post.views}</span>
+                                    <span>♡ {post.heart}</span>
                                 </PostFooter>
                             </Post>
                         ))}
