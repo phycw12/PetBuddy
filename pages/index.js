@@ -4,10 +4,10 @@ import useAuthStore from '@/zustand/authStore';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
-import { MainWrapper, Section, Section2, Title, TitleHeader, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
+import { MainWrapper, Section, Section2, Title, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
 import LogoTitle from '@/components/logo';
-import WriteBtn from '@/components/writebtn';
 import SearchIcon from '@/components/search';
+import Loading from '@/components/loading';
 
 export default function Main(){
     const [popularPosts, setPopularPosts] = useState([]);
@@ -73,7 +73,7 @@ export default function Main(){
 
     if (loading) {
         return (
-            <div>Loading...</div>
+            <Loading/>
         );
     };
 
@@ -82,11 +82,8 @@ export default function Main(){
             <LogoTitle/>
             <MainWrapper>
                 <Section>
+                    <SearchIcon/>
                     <Title>인기글</Title>
-                    <TitleHeader>
-                        <SearchIcon/>
-                        <WriteBtn/>
-                    </TitleHeader>
                 <PostList>
                     {popularPosts.map((post, index) => (
                         <Post key={index}>

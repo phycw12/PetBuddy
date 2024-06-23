@@ -5,9 +5,11 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import useAuthStore from '@/zustand/authStore';
 import { WrapperWrite, FormWrapper, TitleWrite, Editor, ImageUpload, WriteButton, CategorySelect } from '../../styles/emotion';
+import Loading from '@/components/loading';
 
 export default function PostEdit() {
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
     const { postId } = router.query;
     const { user, userData } = useAuthStore();
     const [content, setContent] = useState('');
@@ -130,6 +132,12 @@ export default function PostEdit() {
             urls.push(match[1]);
         }
         return urls;
+    };
+
+    if (loading) {
+        return (
+            <Loading/>
+        );
     };
 
     return (

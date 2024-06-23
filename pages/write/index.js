@@ -5,10 +5,12 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import useAuthStore from '@/zustand/authStore';
 import { WrapperWrite, FormWrapper, TitleWrite, Editor, ImageUpload, WriteButton, CategorySelect } from '../../styles/emotion';
+import Loading from '@/components/loading';
 
 export default function Write() {
     const { user, userData } = useAuthStore();
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
@@ -72,6 +74,7 @@ export default function Write() {
                 title,
                 content,
                 views: 0,
+                like: 0,
             };
 
             // Firestore에 게시물 추가
@@ -88,6 +91,13 @@ export default function Write() {
     const handleGoBack = () => {
         router.back(); // 이전 페이지로 돌아가기
     };
+    
+    if (loading) {
+        return (
+            <Loading/>
+        );
+    };
+
 
     return (
         <>

@@ -29,15 +29,14 @@ export const MenuItem = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #333;
+    color: ${({ isActive }) => (isActive ? '#E800AD' : '#888888')};
     font-size: 12px;
     cursor: pointer;
-`;
-
-    export const MenuIcon = styled.img`
-    width: 24px;
-    height: 24px;
-    margin-bottom: 5px;
+    .MenuIcon {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 5px;
+    }
 `;
 
 export const MenuText = styled.span`
@@ -58,7 +57,8 @@ export const LogoContainer = styled.div`
 `;
 
 export const Logo = styled.div`
-    color: #90EE90; // #FE9A2E 
+    color: #E800AD;
+    // #FE9A2E #90EE90
     font-size: 24px;
     font-weight: bold;
     padding: 10px;
@@ -103,7 +103,7 @@ export const BackImg = styled.img`
     cursor: pointer;
 `;
 
-// index, board, notice, question, review
+// index, board
 
 export const MainWrapper = styled.div`
     display: flex;
@@ -140,7 +140,7 @@ export const Section2 = styled.section`
 export const Title = styled.div`
     font-size: 15px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin: 20px auto;
     color: #3D3D3D;
 `;
 
@@ -161,7 +161,7 @@ export const PostTitleImg = styled.div`
 
 export const PostTitle = styled.div`
     height: 30%;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
     padding-top: 15px;
     cursor: pointer;
@@ -169,13 +169,13 @@ export const PostTitle = styled.div`
 
 export const PostDate = styled.div`
     display: flex;
-    font-size: 11px;
+    font-size: 10px;
     color: #373737;
 `;
 
 export const PostAuthor = styled.div`
     display: flex;
-    font-size: 12px;
+    font-size: 10px;
     color: #373737;
 `;
 
@@ -194,27 +194,74 @@ export const PostImage = styled.img`
 `
 
 export const TitleHeader = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin: 10px auto;
+    cursor: pointer;
+    .searchIcon{
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: #999;
+    }
 `;
 
-// freeboard, notice, question, review
+export const SearchInput = styled.input`
+    width: 100%;
+    padding: 10px;
+    background-color: #E3E3E3;
+    border: none;
+    border-radius: 4px;
+    pointer-events: none; /* input 비활성화 */
+    box-sizing: border-box;
+`;
+
+// board
+
+export const BoardSection = styled.section`
+    width: 100%;
+    max-width: 410px;
+    margin: 10px 80px 20px 80px;
+    box-sizing: border-box;
+`;
 
 export const MenuList = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    margin: 0;
+    justify-content: flex-end;
     font-weight: bold;
     text-decoration: none;
-    /* color: #A4A4A4; */
+    margin-top: -15px;
+    margin-bottom: 5px;
 `;
 
 export const Menu = styled.a`
-    color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
-    font-size: 13px;
+    color: ${({ isActive }) => (isActive ? '#424242' : '#A4A4A4')};
+    font-size: 12px;
+    margin-left: 5px;
     cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -3px; /* 밑줄 위치 조절 */
+        left: 0;
+        width: 100%;
+        height: 1px; /* 밑줄 높이 */
+        background-color: ${({ isActive }) => (isActive ? '#E800AD' : 'transparent')};
+        transition: background-color 0.3s ease, width 0.3s ease;
+    }
+
+    &:hover::after {
+        background-color: #E800AD;
+        width: 100%; /* hover 시 밑줄 너비 전체로 */
+    }
 `;
 
 export const DivisionLine = styled.div`
@@ -227,6 +274,7 @@ export const OrderBy = styled.div`
     flex-direction: row;
     justify-content: flex-end;
     font-size: 12px;
+    margin-top: 10px;
 `;
 
 export const OrderByList = styled.div`
@@ -1197,4 +1245,12 @@ export const DateSeparator = styled.div`
     border-top: 1px solid #ccc;
     padding-top: 10px;
     font-size: 12px;
+`;
+
+// loading
+
+export const LoadingContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 250px auto;
 `;

@@ -5,12 +5,14 @@ import { db, auth, storage } from '../../firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { ChatRoomWrapper, MessageListWrapper, MessageWrapper, MessageContent, SenderInfo, MessageTimestamp, MessageInputWrapper, MessageInput, SendMessageButton, DateSeparator } from '../../styles/emotion';
 import ReactMarkdown from 'react-markdown';
+import Loading from '@/components/loading';
 
 const defaultImageRef = ref(storage, '/petbuddy/profile.svg');
 
 export default function ChatId() {
     const router = useRouter();
     const { chatId } = router.query;
+    const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
     const [newMessage, setNewMessage] = useState('');
@@ -142,6 +144,12 @@ export default function ChatId() {
     if (!chatId) {
         return <div>Loading...</div>; // chatId가 없을 때 로딩 상태를 표시
     }
+
+    if (loading) {
+        return (
+            <Loading/>
+        );
+    };
 
     let previousDate = '';
 

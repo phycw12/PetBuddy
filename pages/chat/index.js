@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { db } from '../../firebase';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs } from 'firebase/firestore';
 import { ChatWrapper } from '../../styles/emotion';
 import useAuthStore from '@/zustand/authStore'; // authStore 불러오기
+import Loading from '@/components/loading';
 
 export default function Chat() {
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
     const [chatRooms, setChatRooms] = useState([]);
     const { user } = useAuthStore(); // Zustand에서 user 정보 가져오기
 
@@ -49,6 +51,12 @@ export default function Chat() {
 
     const handleChatRoomClick = (roomId) => {
         router.push(`/chat/${roomId}`); // 해당 채팅방 페이지로 이동
+    };
+
+    if (loading) {
+        return (
+            <Loading/>
+        );
     };
 
     return (

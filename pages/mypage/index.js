@@ -6,6 +6,7 @@ import useAuthStore from '@/zustand/authStore';
 import { doc, collection, where, query, getDoc, getDocs } from 'firebase/firestore';
 import { MyPageContainer, MyPageSection1, MyPageSection1_1, NicknameLogout, MyPageNickname, Logout, MyPageId, MyPageSection2, MyPagePost, MyPageComment, MyPageSection3, MyPageSection3_1, MyPageSection3_2 } from '../../styles/emotion';
 import ReactMarkdown from 'react-markdown';
+import Loading from '@/components/loading';
 
 export default function MyPage() {
     const { user, userData, nickname, setNickname } = useAuthStore();
@@ -108,7 +109,8 @@ export default function MyPage() {
 
     if (loading) {
         return (
-        <div>Loading...</div>);
+            <Loading/>
+        );
     };
 
     const components = {

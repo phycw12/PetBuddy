@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { db } from '../../firebase';
-import { Wrapper, TitleHeader, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, DivisionLine } from '../../styles/emotion';
+import { Wrapper, TitleHeader, BoardSection, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../../styles/emotion';
 import WriteBtn from '@/components/writebtn';
 import SearchIcon from '@/components/search';
+import Loading from '@/components/loading';
 
 export default function FreeBoard() {
     const router = useRouter();
@@ -61,25 +62,27 @@ export default function FreeBoard() {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
-    }
+        return (
+            <Loading/>
+        );
+    };
 
     return (
         <Wrapper>
-            <Section>
+            <BoardSection>
+                
                 <MenuList>
                     <Menu isActive={activeMenu === 'freeboard'} onClick={() => handleMenuClick('freeboard')}>자유게시판</Menu>
                     <Menu isActive={activeMenu === 'notice'} onClick={() => handleMenuClick('notice')}>공지사항</Menu>
                     <Menu isActive={activeMenu === 'question'} onClick={() => handleMenuClick('question')}>궁금해요</Menu>
                     <Menu isActive={activeMenu === 'review'} onClick={() => handleMenuClick('review')}>사용후기</Menu>
                 </MenuList>
-                <DivisionLine />
+                <SearchIcon/>
                 <OrderBy>
                     <OrderByList isActive={sortOrder === 'createdAt'} onClick={() => handleSortOrderChange('createdAt')}>최신순</OrderByList>
                     <OrderByList isActive={sortOrder === 'views'} onClick={() => handleSortOrderChange('views')}>조회순</OrderByList>
                 </OrderBy>
                 <TitleHeader>
-                    <SearchIcon />
                     <WriteBtn />
                 </TitleHeader>
                 <PostList>
@@ -107,7 +110,7 @@ export default function FreeBoard() {
                         </Post>
                     ))}
                 </PostList>
-            </Section>
+            </BoardSection>
         </Wrapper>
     );
 };
