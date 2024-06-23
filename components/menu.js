@@ -70,7 +70,7 @@ export default function Menu() {
                   <MenuText>홈</MenuText>
               </MenuItem>
             </Link>
-            <Link href="/board/freeboard" style={{ textDecoration: "none"}}>
+            <Link href="/board" style={{ textDecoration: "none"}}>
               <MenuItem>
                     <MenuIcon src={freeboardImageURL} alt="Search"/>
                     <MenuText>게시판</MenuText>
