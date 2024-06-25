@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useAuthStore from '@/zustand/authStore';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
-import { MainWrapper, Section, Section2, Title, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
+import { Wrapper, Section, OrderBy, OrderByList, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
 import LogoTitle from '@/components/logo';
 import SearchIcon from '@/components/search';
 import Loading from '@/components/loading';
@@ -16,18 +16,20 @@ export default function Main(){
     const router = useRouter();
     const storage = getStorage();
     const [basicImageUrl, setBasicImageUrl] = useState('');
-    const [loading, setLoading] = useState(true); // 이미지 로딩 상태
+    const [loading, setLoading] = useState(true);
+    const [visiblePosts, setVisiblePosts] = useState(5);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [sortOrder, setSortOrder] = useState('createdAt');
 
     useEffect(() => {
         const fetchImages = async () => {
             try {
                 const basicImageURL = await getDownloadURL(ref(storage, '/petbuddy/basic.svg'));
                 setBasicImageUrl(basicImageURL);
-
-                setLoading(false); // 이미지 로딩 완료
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching images:', error);
-                setLoading(true); // 이미지 로딩 실패
+                setLoading(true);
             }
         };
 
@@ -35,32 +37,48 @@ export default function Main(){
     }, [storage]);
 
     useEffect(() => {
-        async function fetchPopularPosts() {
-            const q = query(collection(db, 'posts'),
-                            orderBy('views', 'desc'),
-                            limit(2)); // 조회수가 가장 높은 2개의 글 가져오기
+        async function fetchPosts() {
+            const q = query(
+                collection(db, 'posts'),
+                orderBy(sortOrder, 'desc')
+            );
             const querySnapshot = await getDocs(q);
             const posts = [];
             querySnapshot.forEach((doc) => {
                 posts.push({ id: doc.id, ...doc.data() });
             });
-            setPopularPosts(posts);
+
+            if (sortOrder === 'createdAt') {
+                setRecentPosts(posts);
+            } else {
+                setPopularPosts(posts);
+            }
         }
-        fetchPopularPosts();
-    }, []);
+
+        fetchPosts();
+    }, [sortOrder]);
 
     useEffect(() => {
-        async function fetchRecentPosts() {
-            const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(4));
-            const querySnapshot = await getDocs(q);
-            const posts = [];
-            querySnapshot.forEach((doc) => {
-                posts.push({ id: doc.id, ...doc.data() });
-            });
-            setRecentPosts(posts);
-        }
-        fetchRecentPosts();
-    }, []);
+        const handleScroll = () => {
+            if (!loadingMore && window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+                setLoadingMore(true);
+                const newVisiblePosts = visiblePosts + 5;
+                if (newVisiblePosts <= recentPosts.length) {
+                    setTimeout(() => {
+                        setVisiblePosts(newVisiblePosts);
+                        setLoadingMore(false);
+                    }, 1000);
+                } else {
+                    setLoadingMore(false);
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [visiblePosts, recentPosts, loadingMore]);
 
     const handlePostClick = (postId) => {
         if (user) {
@@ -71,74 +89,67 @@ export default function Main(){
         }
     };
 
-    if (loading) {
-        return (
-            <Loading/>
-        );
+    const handleSortOrderChange = (order) => {
+        setSortOrder(order);
     };
+
+    const extractImageUrls = (content) => {
+        const regex = /!\[.*?\]\((.*?)\)/g; // Markdown 이미지 링크 형식: ![alt](url)
+        let matches;
+        const urls = [];
+        while ((matches = regex.exec(content)) !== null) {
+            urls.push(matches[1]);
+        }
+        return urls;
+    };
+
+    if (loading) {
+        return <Loading />;
+    }
+
+    const postsToDisplay = sortOrder === 'createdAt' ? recentPosts : popularPosts;
 
     return (
         <>
-            <LogoTitle />
-            <MainWrapper>
+            <LogoTitle/>
+            <Wrapper>
                 <Section>
                     <SearchIcon />
-                    <Title>인기글</Title>
+                    <OrderBy>
+                        <OrderByList isActive={sortOrder === 'createdAt'} onClick={() => handleSortOrderChange('createdAt')}>최신순</OrderByList>
+                        <OrderByList isActive={sortOrder === 'views'} onClick={() => handleSortOrderChange('views')}>인기순</OrderByList>
+                    </OrderBy>
                     <PostList>
-                        {popularPosts.map((post, index) => (
-                            <Post key={index}>
-                                <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                    <PostImage src={basicImageUrl} alt={post.title} />
-                                    <PostTitle>{post.title}</PostTitle>
-                                </PostTitleImg>
-                                <PostAuthor>{post.authorNickname}</PostAuthor>
-                                <PostDate>
-                                    {new Intl.DateTimeFormat('ko-KR', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                        hour12: false,
-                                    }).format(post.createdAt.toDate())}
-                                </PostDate>
-                                <PostFooter>
-                                    <span>조회수 {post.views}</span>
-                                    <span>♡ {post.heart}</span>
-                                </PostFooter>
-                            </Post>
-                        ))}
+                        {postsToDisplay.slice(0, visiblePosts).map((post, index) => {
+                            const imageUrls = extractImageUrls(post.content);
+                            const postImage = imageUrls.length > 0 ? imageUrls[0] : basicImageUrl;
+                            return (
+                                <Post key={index} onClick={() => handlePostClick(post.id)}>
+                                    <PostTitleImg>
+                                        <PostImage src={postImage} alt={post.title} />
+                                        <PostTitle>{post.title}</PostTitle>
+                                    </PostTitleImg>
+                                    <PostAuthor>{post.authorNickname}</PostAuthor>
+                                    <PostDate>
+                                        {new Intl.DateTimeFormat('ko-KR', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: false,
+                                        }).format(post.createdAt.toDate())}
+                                    </PostDate>
+                                    <PostFooter>
+                                        <span>조회수 {post.views}</span>
+                                        <span>♡ {post.heart}</span>
+                                    </PostFooter>
+                                </Post>
+                            );
+                        })}
                     </PostList>
                 </Section>
-                <Section2>
-                    <Title>최신글</Title>
-                    <PostList>
-                        {recentPosts.map((post, index) => (
-                            <Post key={index}>
-                                <PostTitleImg onClick={() => handlePostClick(post.id)}>
-                                    <PostImage src={basicImageUrl} alt={post.title} />
-                                    <PostTitle>{post.title}</PostTitle>
-                                </PostTitleImg>
-                                <PostAuthor>{post.authorNickname}</PostAuthor>
-                                <PostDate>
-                                    {new Intl.DateTimeFormat('ko-KR', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                        hour12: false,
-                                    }).format(post.createdAt.toDate())}
-                                </PostDate>
-                                <PostFooter>
-                                    <span>조회수 {post.views}</span>
-                                    <span>♡ {post.heart}</span>
-                                </PostFooter>
-                            </Post>
-                        ))}
-                    </PostList>
-                </Section2>
-            </MainWrapper>
+            </Wrapper>
         </>
     );
 };

@@ -11,7 +11,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [localUser, setLocalUser] = useState(null); // 사용자 상태 추가
     const { setUser: setAuthUser } = useAuthStore(); // Zustand에서 사용자 상태 관리 함수
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
     const router = useRouter();
 
@@ -53,11 +53,11 @@ export default function Login() {
         router.push(href);
     };
 
-    if (loading) {
-        return (
-            <Loading/>
-        );
-    };
+    // if (loading) {
+    //     return (
+    //         <Loading/>
+    //     );
+    // };
 
     return (
         <LoginContainer>

@@ -108,10 +108,6 @@ export default function Post() {
         router.push(`/write/${postId}`); // 글을 수정하는 페이지로 이동
     };
 
-    const handleGoBack = () => {
-        router.back(); // 이전 페이지로 돌아가기
-    };
-
     const handleCommentSubmit = async () => {
         if (!newComment.trim()) {
             alert('댓글을 입력해주세요.');
@@ -271,14 +267,12 @@ export default function Post() {
                     <PostIdButton onClick={handleDelete}>삭제</PostIdButton>
                 </ActionButtons>
             )}
-            <PostIdButton onClick={handleGoBack}>뒤로가기</PostIdButton>
+            <PostIdButton onClick={() => handleChatButtonClick(post.authorId)}>채팅하기</PostIdButton>
             <MetaInfo>
                 <span>카테고리 : {post.category}</span>
                 <span>
                     작성자 :{' '}
-                    <button onClick={() => handleChatButtonClick(post.authorId)}>
                         {post.authorNickname}
-                    </button>
                 </span>
                 <span>조회수 : {post.views + 1}</span>
                 <span>

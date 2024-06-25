@@ -8,7 +8,7 @@ import Loading from '@/components/loading';
 
 export default function SignUp() {
     const router = useRouter();
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [emailId, setEmailId] = useState("");
     const [password, setPassword] = useState("");
     const [pwCheck, setPwCheck] = useState("");
@@ -46,11 +46,11 @@ export default function SignUp() {
         }
     };
 
-    if (loading) {
-        return (
-            <Loading/>
-        );
-    };
+    // if (loading) {
+    //     return (
+    //         <Loading/>
+    //     );
+    // };
 
     return(
         <SignUpContainer>

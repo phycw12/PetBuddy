@@ -145,12 +145,6 @@ export default function ChatId() {
         return <div>Loading...</div>; // chatId가 없을 때 로딩 상태를 표시
     }
 
-    if (loading) {
-        return (
-            <Loading/>
-        );
-    };
-
     let previousDate = '';
 
     return (

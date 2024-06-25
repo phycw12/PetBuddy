@@ -3,16 +3,16 @@ import { useRouter } from 'next/router';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { db } from '../../firebase';
-import { Wrapper, TitleHeader, BoardSection, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitle, PostContent, PostText, PostAuthor, PostImage, CommentSection, CommentIcon, CommentCount} from '../../styles/emotion';
-import WriteBtn from '@/components/writebtn';
+import ReactMarkdown from 'react-markdown';
+import { Wrapper, WriteHeader, Write, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitle, PostContent, PostText, PostAuthor, PostImage, CommentSection, CommentIcon, CommentCount } from '../../styles/emotion';
 import SearchIcon from '@/components/search';
 import Loading from '@/components/loading';
 
-export default function FreeBoard() {
+export default function Board() {
     const router = useRouter();
     const storage = getStorage();
     const [activeMenu, setActiveMenu] = useState('freeboard');
-    const [recentPosts, setRecentPosts] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [sortOrder, setSortOrder] = useState('createdAt');
     const [basicImageUrl, setBasicImageUrl] = useState('');
     const [loading, setLoading] = useState(true);
@@ -36,67 +36,44 @@ export default function FreeBoard() {
     }, [storage]);
 
     useEffect(() => {
-        async function fetchRecentPosts() {
+        async function fetchPosts() {
             const q = query(
                 collection(db, 'posts'),
                 where('category', '==', activeMenu),
                 orderBy(sortOrder, 'desc')
             );
             const querySnapshot = await getDocs(q);
-            const posts = [];
+            const fetchedPosts = [];
             querySnapshot.forEach((doc) => {
-                posts.push({ id: doc.id, ...doc.data() });
+                fetchedPosts.push({ id: doc.id, ...doc.data() });
             });
-            setRecentPosts(posts);
+            setPosts(fetchedPosts);
         }
-        fetchRecentPosts();
+        fetchPosts();
     }, [sortOrder, activeMenu]);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (
-                window.innerHeight + document.documentElement.scrollTop
-                === document.documentElement.offsetHeight
-            ) {
-                // 사용자가 스크롤을 끝까지 내림
-                const newVisiblePosts = visiblePosts + 5; // 추가로 보일 게시물 수
-                if (newVisiblePosts <= recentPosts.length) {
-                    setVisiblePosts(newVisiblePosts);
-                }
-            }
-        };
-    
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [visiblePosts, recentPosts]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (
-                !loadingMore &&
-                window.innerHeight + document.documentElement.scrollTop
-                === document.documentElement.offsetHeight
-            ) {
+            if (!loadingMore && window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
                 setLoadingMore(true);
                 const newVisiblePosts = visiblePosts + 5;
-                if (newVisiblePosts <= recentPosts.length) {
+                if (newVisiblePosts <= posts.length) {
                     setTimeout(() => {
                         setVisiblePosts(newVisiblePosts);
+                        setNextLoadIndex(newVisiblePosts);
                         setLoadingMore(false);
-                    }, 1000); // 예시로 1초 후에 로딩 상태 해제
+                    }, 1000);
                 } else {
                     setLoadingMore(false);
                 }
             }
         };
-    
+
         window.addEventListener('scroll', handleScroll);
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [visiblePosts, recentPosts, loadingMore]);
+    }, [visiblePosts, posts, loadingMore]);
 
     const handleMenuClick = (menu) => {
         setActiveMenu(menu);
@@ -110,16 +87,35 @@ export default function FreeBoard() {
         router.push(`/post/${postId}`);
     };
 
-    if (loading) {
-        return (
-            <Loading/>
-        );
+    const clickWriteBtn = () => {
+        router.push('/write');
     };
+
+    const extractImageUrls = (content) => {
+        const regex = /!\[.*?\]\((.*?)\)/g; // Markdown 이미지 링크 형식: ![alt](url)
+        let matches;
+        const urls = [];
+        while ((matches = regex.exec(content)) !== null) {
+            urls.push(matches[1]);
+        }
+        return urls;
+    };
+
+    // 이미지 스타일을 위한 컴포넌트 정의
+    const components = {
+        img: ({ src, alt }) => (
+            <img src={src} alt={alt} style={{ width: '100%', maxHeight: '500px', objectFit: 'cover' }} />
+        )
+    };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <Wrapper>
-            <BoardSection>
-                <SearchIcon/>
+            <Section>
+                <SearchIcon />
                 <MenuList>
                     <Menu isActive={activeMenu === 'freeboard'} onClick={() => handleMenuClick('freeboard')}>멍냥멍냥</Menu>
                     <Menu isActive={activeMenu === 'notice'} onClick={() => handleMenuClick('notice')}>공지사항</Menu>
@@ -130,26 +126,34 @@ export default function FreeBoard() {
                     <OrderByList isActive={sortOrder === 'createdAt'} onClick={() => handleSortOrderChange('createdAt')}>최신순</OrderByList>
                     <OrderByList isActive={sortOrder === 'views'} onClick={() => handleSortOrderChange('views')}>인기순</OrderByList>
                 </OrderBy>
-                <TitleHeader>
-                    <WriteBtn />
-                </TitleHeader>
+                <WriteHeader>
+                    <Write onClick={clickWriteBtn}>글쓰기</Write>
+                </WriteHeader>
                 <PostList>
-                    {recentPosts.slice(0, visiblePosts).map((post, index) => (
-                        <Post key={index} onClick={() => handlePostClick(post.id)}>
-                            <PostImage src={basicImageUrl} alt={post.title}/>
-                            <PostContent>
-                                <PostTitle>{post.title}</PostTitle>
-                                <PostAuthor>{post.authorNickname}</PostAuthor>
-                                <PostText>{post.content}</PostText>
-                            </PostContent>
-                            <CommentSection>
-                                <CommentIcon>💬</CommentIcon>
-                                <CommentCount>댓글수</CommentCount>
-                            </CommentSection>
-                        </Post>
-                    ))}
+                    {posts.slice(0, visiblePosts).map((post, index) => {
+                        const imageUrls = extractImageUrls(post.content);
+                        const postImage = imageUrls.length > 0 ? imageUrls[0] : basicImageUrl;
+                        return (
+                            <Post key={index} onClick={() => handlePostClick(post.id)}>
+                                {/* <PostImage src={postImage} alt={post.title} /> */}
+                                <PostContent>
+                                    <PostTitle>{post.title}</PostTitle>
+                                    <PostAuthor>{post.authorNickname}</PostAuthor>
+                                    <PostText>
+                                        <ReactMarkdown components={components}>
+                                            {post.content.replace(/\n/g, '  \n')}
+                                        </ReactMarkdown>
+                                    </PostText>
+                                </PostContent>
+                                <CommentSection>
+                                    <CommentIcon>💬</CommentIcon>
+                                    <CommentCount>댓글수</CommentCount>
+                                </CommentSection>
+                            </Post>
+                        );
+                    })}
                 </PostList>
-            </BoardSection>
+            </Section>
         </Wrapper>
     );
 };

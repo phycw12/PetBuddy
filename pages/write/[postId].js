@@ -20,6 +20,12 @@ export default function PostEdit() {
     const textAreaRef = useRef(null);
 
     useEffect(() => {
+        if (user && userData) {
+            setLoading(false);
+        }
+    }, [user, userData]);
+
+    useEffect(() => {
         async function fetchPostData() {
             if (postId) {
                 try {
@@ -114,7 +120,7 @@ export default function PostEdit() {
             console.log('Document updated with ID: ', postId);
 
             // 수정 완료 후 게시물 페이지로 이동
-            router.push(`/board/${category}`);
+            router.push('/board');
         } catch (error) {
             console.error('Error updating document: ', error);
         }

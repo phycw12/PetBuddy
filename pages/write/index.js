@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { db, storage } from '../../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -16,6 +16,12 @@ export default function Write() {
     const [category, setCategory] = useState('');
     const fileInputRef = useRef(null);
     const textAreaRef = useRef(null);
+
+    useEffect(() => {
+        if (user && userData) {
+            setLoading(false);
+        }
+    }, [user, userData]);
 
     const handleContentChange = (e) => {
         setContent(e.target.value);
@@ -82,7 +88,7 @@ export default function Write() {
             console.log('Document written with ID: ', docRef.id);
 
             // 작성 완료 후 홈 페이지로 이동
-            router.push(`/board/${category}`);
+            router.push('/board');
         } catch (error) {
             console.error('Error adding document: ', error);
         }

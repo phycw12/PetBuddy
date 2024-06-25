@@ -66,7 +66,7 @@ export const Logo = styled.div`
     font-family: 'Inria Sans', sans-serif;
 `;
 
-// search
+// search icon
 
 export const Search = styled.img`
     width: 24px;
@@ -79,7 +79,7 @@ export const TitleHeader = styled.div`
     position: relative;
     display: inline-block;
     width: 100%;
-    margin: 10px auto;
+    margin-top: 10px;
     cursor: pointer;
     .searchIcon{
         position: absolute;
@@ -101,15 +101,6 @@ export const SearchInput = styled.input`
     box-sizing: border-box;
 `;
 
-// writebtn
-
-export const WritePage = styled.img`
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-`;
-
 // back
 
 export const Back = styled.div`
@@ -118,8 +109,8 @@ export const Back = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000; /* 다른 요소 위에 위치하도록 z-index 설정 */
-    margin: 20px; /* 여백 설정 */
+    z-index: 1000;
+    margin: 20px;
     cursor: pointer;
 `;
 
@@ -202,24 +193,6 @@ export const CommentCount = styled.span`
 
 // index
 
-export const MainWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    min-width: 300px;
-`;
-
-export const Section2 = styled(Section)``;
-
-export const Title = styled.h2`
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-`;
-
 export const PostTitleImg = styled.div`
     display: flex;
     flex-direction: column;
@@ -250,10 +223,6 @@ export const PostFooter = styled.div`
 
 // board
 
-export const BoardSection = styled(Section)`
-    margin: 10px auto;
-`;
-
 export const MenuList = styled.div`
     display: flex;
     flex-direction: row;
@@ -265,7 +234,7 @@ export const MenuList = styled.div`
 
 export const Menu = styled.a`
     color: ${({ isActive }) => (isActive ? '#E800AD' : '#A4A4A4')};
-    font-size: 12px;
+    font-size: 14px;
     margin-left: 5px;
     cursor: pointer;
     position: relative;
@@ -307,6 +276,18 @@ export const OrderByList = styled.div`
     margin-bottom: 10px; 
     margin-left: 5px; 
     color: ${({ isActive }) => (isActive ? '#373737' : '#A4A4A4')};
+    cursor: pointer;
+`;
+
+export const WriteHeader = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    cursor: pointer;
+`;
+
+export const Write = styled.div`
+    font-size: 12px;
     cursor: pointer;
 `;
 
@@ -385,7 +366,7 @@ export const SignUpContainer = styled.div`
     align-items: center;
     justify-content: center;
     max-width: 400px;
-    margin : 200px auto 0;
+    margin : 50px auto;
 `;
 
 export const SignupTitle = styled.div`
@@ -555,228 +536,89 @@ export const SignupFind = styled.div`
 
 // mypage
 
+
 export const MyPageContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 400px;
-    margin: 200px auto 0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 50px auto;
+    width: 100%;
+    max-width: 450px;
+    font-size: 13px;
 `;
 
 export const MyPageSection1 = styled.div`
     display: flex;
-    flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
 `;
 
 export const MyPageSection1_1 = styled.div`
     display: flex;
-    flex-direction: row;
     align-items: center;
-`;
 
-export const NicknameLogout = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-left: 10px;
-`;
-
-export const MyPageNickname = styled.div`
-    font-weight: bold;
-`;
-
-export const ProfileImg = styled.img`
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-export const Logout = styled.button`
-    background-color: transparent;
-    border: none;
-    color: #007AFF;
-    cursor: pointer;
-`;
-
-export const MyPageId = styled.div`
-    margin-top: 10px;
-`;
-
-export const MyPageSection2 = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 100%;
-    margin: 10px 0;
-    border: 1px solid #D9D9D9;
-    border-radius: 5px;
-    padding: 10px;
-`;
-
-export const MyPagePost = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
-export const MyPageComment = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
-export const MyPageSection3 = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    border: 1px solid #D9D9D9;
-    border-radius: 5px;
-    padding: 10px;
-`;
-
-export const MyPageSection3_1 = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin-bottom: 10px;
-`;
-export const MyPageSection3_2 = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-`;
-
-// [postId].js
-
-export const PostIdContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 100vh;
-`;
-
-export const PostIdTitle = styled.h1`
-    font-size: 24px;
-    color: #333;
-`;
-
-export const MetaInfo = styled.div`
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
-    width: 100%;
-`;
-
-export const PostIdContents = styled.div`
-    flex: 1;
-    width: 80%;
-    overflow: auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
-
-export const ActionButtons = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-`;
-
-export const PostIdButton = styled.button`
-    padding: 10px 20px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-
-    &:hover {
-    background-color: #0056b3;
-    }
-`;
-
-export const CommentsContainer = styled.div`
-    width: 100%;
-    margin-top: 20px;
-`;
-
-export const CommentInputContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 100%;
-`;
-
-export const CommentInput = styled.textarea`
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-right: 10px;
-`;
-
-export const CommentSubmitButton = styled.button`
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #0056b3;
-    }
-`;
-
-export const Comment = styled.div`
-    background-color: #fff;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
-
-export const CommentHeader = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
     img {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         margin-right: 10px;
     }
 `;
 
-export const CommentBody = styled.div`
-    font-size: 14px;
-    color: #333;
+export const NicknameLogout = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    span {
+        margin-bottom: 5px;
+    }
 `;
 
-export const CommentActions = styled.div`
+export const MyPageNickname = styled.span`
+    font-weight: bold;
+`;
+
+export const Logout = styled.span`
+    cursor: pointer;
+    color: #007bff;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+export const MyPageId = styled.span`
+    font-size: 12px;
+    color: #666;
+`;
+
+export const MyPageSection2 = styled.div`
     display: flex;
-    justify-content: flex-end;
-    button {
-        margin-left: 10px;
-        border: none;
-        background: none;
-        color: #007bff;
+    justify-content: space-between;
+    margin-bottom: 20px;
+`;
+
+export const MyPagePost = styled.div`
+    text-align: center;
+`;
+
+export const MyPageComment = styled.div`
+    text-align: center;
+`;
+
+export const MyPageSection3 = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const MyPageSection3_1 = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+
+    span {
         cursor: pointer;
+        margin-bottom: 10px;
 
         &:hover {
             text-decoration: underline;
@@ -784,23 +626,186 @@ export const CommentActions = styled.div`
     }
 `;
 
+export const MyPageSection3_2 = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    span {
+        cursor: pointer;
+        margin-bottom: 10px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+`;
+
+// [postId].js
+
+export const PostIdContainer = styled.div`
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 450px;
+    margin: 50px auto;
+`;
+
+export const PostIdTitle = styled.h1`
+    font-size: 24px;
+    margin-bottom: 10px;
+`;
+
+export const MetaInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+`;
+
+export const PostIdContents = styled.div`
+    margin-top: 20px;
+    font-size: 16px;
+
+    p {
+        margin-bottom: 10px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+`;
+
+export const ActionButtons = styled.div`
+    margin-bottom: 10px;
+
+    button {
+        margin-right: 10px;
+        padding: 8px 16px;
+        background-color: #FF86C4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #FF62AE;
+        }
+    }
+`;
+
+export const PostIdButton = styled.button`
+    padding: 8px 16px;
+    background-color: #FF86C4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+
+    &:hover {
+        background-color: #FF62AE;
+    }
+`;
+
+export const CommentsContainer = styled.div`
+    margin-top: 20px;
+`;
+
+export const Comment = styled.div`
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+`;
+
+export const CommentHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    span {
+        font-weight: bold;
+    }
+`;
+
+export const CommentBody = styled.div`
+    margin-bottom: 10px;
+`;
+
+export const CommentActions = styled.div`
+    display: flex;
+
+    button {
+        margin-right: 10px;
+        padding: 6px 12px;
+        background-color: #FF86C4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #FF62AE;
+        }
+    }
+`;
+
+export const CommentInputContainer = styled.div`
+    display: flex;
+    margin-bottom: 10px;
+`;
+
+export const CommentInput = styled.textarea`
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+`;
+
+export const CommentSubmitButton = styled.button`
+    padding: 10px 16px;
+    background-color: #FF86C4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+
+    &:hover {
+        background-color: #FF62AE;
+    }
+`;
+
 export const CommentEditBtn = styled.button`
-    visibility: ${({ editMode }) => (editMode ? 'hidden' : 'visible')};
+    padding: 6px 12px;
+    background-color: ${({ editMode }) => (editMode ? '#FF86C4' : '#FF62AE')};
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+
+    &:hover {
+        background-color: ${({ editMode }) => (editMode ? '#FF86C4' : '#FF62AE')};
+    }
 `;
 
 export const ChatButton = styled.button`
-    background-color: #007bff;
+    padding: 8px 16px;
+    background-color: #FF86C4;
     color: white;
     border: none;
-    padding: 8px 16px;
+    border-radius: 4px;
     cursor: pointer;
     margin-left: 10px;
-    font-size: 14px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
 
     &:hover {
-        background-color: #0056b3;
+        background-color: #FF62AE;
     }
 `;
 
@@ -812,9 +817,8 @@ export const PostManagementWrapper = styled.div`
     align-items: center;
     justify-content: center;
     max-width: 600px;
-    margin: 100px auto;
+    margin: 50px auto;
     padding: 30px;
-    background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
@@ -845,7 +849,7 @@ export const PostWrittenTitle = styled.div`
 `;
 
 export const PostManagementDelete = styled.div`
-    background-color: gray;
+    background-color: #FF86C4;
     color: white;
     padding: 8px 16px;
     border-radius: 4px;
@@ -901,7 +905,6 @@ export const ProfileWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 50px;
@@ -922,7 +925,7 @@ export const ProfileImageContainer = styled.div`
     `;
 
 export const ProfileImageUploadButton = styled.div`
-    background-color: #4caf50;
+    background-color: #FF86C4;
     color: white;
     padding: 8px 16px;
     border-radius: 4px;
@@ -930,7 +933,7 @@ export const ProfileImageUploadButton = styled.div`
     `;
 
 export const ProfileImageDeleteButton = styled.div`
-    background-color: #4caf50;
+    background-color: #FF86C4;
     color: white;
     padding: 8px 16px;
     border-radius: 4px;
@@ -968,7 +971,7 @@ export const ProfileButtonContainer = styled.div`
     `;
 
 export const ProfileButton = styled.span`
-    background-color: #4caf50;
+    background-color: #FF86C4;
     color: white;
     padding: 8px 16px;
     border-radius: 4px;
@@ -976,12 +979,12 @@ export const ProfileButton = styled.span`
     margin: 0 10px;
 
     &:last-child {
-        background-color: #f44336;
+        background-color: #FF62AE;
     }
     `;
 
 export const ProfileWithdrawButton = styled.div`
-    background-color: #f44336;
+    background-color: #FF86C4;
     color: white;
     padding: 8px 16px;
     border-radius: 4px;
@@ -991,46 +994,142 @@ export const ProfileWithdrawButton = styled.div`
 `;
 
 
-// find
+// search page
 
 export const FindWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 20px;
-    background-color: #f2f2f2;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 500px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 450px;
+    margin: 50px auto;
+
+    input {
+        padding: 8px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+    }
+
+    button {
+        padding: 8px 16px;
+        background-color: #FF86C4;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    button:hover {
+        background-color: #FF62AE;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #007bff;
+        cursor: pointer;
+    }
+
+    p {
+        margin: 0;
+        font-size: 13px;
+        color: #333;
+        cursor: pointer;
+    }
 `;
 
 // inquiry
 
 export const InquiryWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 20px;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
-    height: 70vh;
-    overflow-y: auto;
+    margin: 50px auto;
+    height: 600px;
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input[type='text'],
+    textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    button {
+        padding: 8px 16px;
+        background-color: #FF86C4;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    button:hover {
+        background-color: #FF62AE;
+    }
+
+    h2 {
+        font-size: 16px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
 `;
 
 export const InquiryList = styled.div`
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    div{
-        margin-bottom: 10px;
+    margin-top: 10px;
+
+    div {
+        border: 1px solid #eee;
+        border-radius: 4px;
         padding: 10px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;
+        margin-bottom: 10px;
     }
-    p{
+
+    p {
         margin: 0;
-        font-size: 16px;
     }
 `;
 
@@ -1044,7 +1143,9 @@ export const AccountRecoveryContainer = styled.div`
     background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
+    margin: 50px auto;
+    width: 100%;
+    max-width: 450px;
 `;
 
 export const AccountRecoveryTitle = styled.h1`
@@ -1118,28 +1219,76 @@ export const AccountRecoveryBtn = styled.button`
     padding: 10px;
     font-size: 16px;
     color: #fff;
-    background-color: #0070f3; /* 적절한 색상으로 수정 */
+    background-color: #FF86C4;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: #0058b8; /* hover 시 색상 변경 */
+        background-color: #FF62AE;
     }
 `;
 
 // chat
 
 export const ChatWrapper = styled.div`
+    padding: 20px;
+    margin: 50px auto 0;
+    max-width: 400px;
+`;
+
+export const ChatList = styled.div`
+    font-size: 14px;
+    text-align: center;
+`;
+
+export const ChatRoomList = styled.ul`
+    list-style: none;
+    padding: 0;
+`;
+
+export const ChatRoomItem = styled.li`
+    margin-bottom: 10px;
+`;
+
+export const ChatRoomButton = styled.button`
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #f1f1f1;
+    }
+`;
+
+export const ChatRoomDetails = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 50px auto;
-    max-width: 400px;
+    align-items: flex-start;
+`;
+
+export const ChatRoomName = styled.span`
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+`;
+
+export const ChatRoomDate = styled.span`
+    font-size: 10px;
+    color: #888;
+`;
+
+export const DivisionLine_2 = styled.hr`
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 10px 0;
 `;
 
 
@@ -1203,22 +1352,6 @@ export const MessageTimestamp = styled.div`
     margin-left: ${props => props.isSelf ? '0' : '5px'};
 `;
 
-export const MessageBubble = styled.div`
-    background-color: ${props => props.isSelf ? '#DCF8C6' : '#ffffff'};
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-bottom: 10px;
-    padding: 5px;
-    word-wrap: break-word;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    align-self: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
-    p{
-        margin: 0;
-        padding: 5px;
-    }
-`;
-
 export const MessageSender = styled.div`
     font-weight: bold;
     margin-bottom: 5px;
@@ -1251,7 +1384,7 @@ export const MessageInput = styled.input`
 `;
 
 export const SendMessageButton = styled.button`
-    background-color: #4caf50;
+    background-color: #FF86C4;
     color: white;
     border: none;
     border-radius: 4px;
@@ -1260,7 +1393,7 @@ export const SendMessageButton = styled.button`
     cursor: pointer;
     transition: background-color 0.3s;
     &:hover {
-        background-color: #45a049;
+        background-color: #FF62AE;
     }
 `;
 
