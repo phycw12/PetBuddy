@@ -542,7 +542,6 @@ export const MyPageContainer = styled.div`
     border: 1px solid #ccc;
     border-radius: 8px;
     margin: 50px auto;
-    width: 100%;
     max-width: 450px;
     font-size: 13px;
 `;

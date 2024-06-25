@@ -12,11 +12,6 @@ export default function Menu() {
     const router = useRouter();
     const [activeMenu, setActiveMenu] = useState(null);
 
-    useEffect(() => {
-        // Reset active menu when router pathname changes
-        setActiveMenu(null);
-    }, [router.pathname]);
-
     const handlehomeClick = () => {
         setActiveMenu('/');
         router.push('/');
