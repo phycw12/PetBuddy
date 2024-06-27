@@ -999,13 +999,12 @@ export const FindWrapper = styled.div`
     border: 1px solid #ccc;
     border-radius: 8px;
     margin-bottom: 20px;
-    width: 100%;
     max-width: 450px;
     margin: 50px auto;
 `;
 
 export const FindInput = styled.input`
-    width: 70%;
+    width: 65%;
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #ccc;
