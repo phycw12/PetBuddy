@@ -29,7 +29,7 @@ export default function BackBtn() {
     };
 
     if (loading) {
-        return <div> </div>;
+        return null;
     };
     
     return(
