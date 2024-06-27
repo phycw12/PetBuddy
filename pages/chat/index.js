@@ -4,9 +4,11 @@ import { db } from '../../firebase';
 import { collection, query, getDocs, orderBy, limit } from 'firebase/firestore';
 import { ChatWrapper, ChatList, ChatRoomList, ChatRoomItem, ChatRoomButton, ChatRoomDetails, ChatRoomName, ChatRoomDate, DivisionLine_2 } from '../../styles/emotion';
 import useAuthStore from '@/zustand/authStore'; // authStore 불러오기
+import Loading from '@/components/loading';
 
 export default function Chat() {
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
     const [chatRooms, setChatRooms] = useState([]);
     const { user } = useAuthStore(); // Zustand에서 user 정보 가져오기
 
@@ -51,8 +53,10 @@ export default function Chat() {
 
                 // 찾은 채팅방 목록 설정
                 setChatRooms(rooms);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching chat rooms:', error);
+                setLoading(true);
             }
         };
 
@@ -69,6 +73,10 @@ export default function Chat() {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}년 ${month}월 ${day}일`;
+    };
+
+    if (loading) {
+        return <Loading/>;
     };
 
     return (
