@@ -244,7 +244,7 @@ export default function Post() {
     // 컴포넌트 정의
     const components = {
         img: ({ src, alt }) => (
-            <img src={src} alt={alt} style={{ maxWidth: '400px', maxHeight: '500px' }} />
+            <img src={src} alt={alt} style={{ maxHeight: '500px' }} />
         )
     };
 
