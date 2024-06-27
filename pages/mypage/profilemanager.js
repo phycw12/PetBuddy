@@ -254,10 +254,6 @@ export default function ProfileManager() {
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    };
-
     // Markdown 컴포넌트 정의
     const components = {
         img: ({ src, alt }) => (

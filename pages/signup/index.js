@@ -4,11 +4,9 @@ import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { SignUpContainer, SignupTitle, IDInput, PWInput, PWCheck, NicknameInput, Terms, Term, Term1, Term2, SignUpBtn } from '../../styles/emotion';
-import Loading from '@/components/loading';
 
 export default function SignUp() {
     const router = useRouter();
-    // const [loading, setLoading] = useState(true);
     const [emailId, setEmailId] = useState("");
     const [password, setPassword] = useState("");
     const [pwCheck, setPwCheck] = useState("");
@@ -45,12 +43,6 @@ export default function SignUp() {
             alert('회원가입에 실패하였습니다.');
         }
     };
-
-    // if (loading) {
-    //     return (
-    //         <Loading/>
-    //     );
-    // };
 
     return(
         <SignUpContainer>

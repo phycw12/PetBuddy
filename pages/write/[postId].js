@@ -126,10 +126,6 @@ export default function PostEdit() {
         }
     };
 
-    const handleGoBack = () => {
-        router.back(); // 이전 페이지로 돌아가기
-    };
-
     const extractImageUrls = (text) => {
         const regex = /!\[image\]\((.*?)\)/g;
         const urls = [];
@@ -149,7 +145,6 @@ export default function PostEdit() {
     return (
         <>
             <WrapperWrite>
-                <button onClick={handleGoBack}>뒤로가기</button>
                 <FormWrapper onSubmit={handleSubmit}>
                     <CategorySelect>
                         <select value={category} onChange={handleCategoryChange}>

@@ -253,10 +253,9 @@ export default function Post() {
                 <img src={src} alt={alt} style={{ maxWidth: '50px', maxHeight: '50px', borderRadius: '50%' }} />
         )
     };
-
     if (!post) {
         return <div>Loading...</div>;
-    }
+    };
 
     return (
         <PostIdContainer>

@@ -27,13 +27,7 @@ export default function BackBtn() {
     const backClick = () => {
         router.back();
     };
-
-
-    if (loading) {
-        return (
-        <div>Loading...</div>);
-    };
-
+    
     return(
         <Back>
             <BackImg src={backImageUrl} alt="Back" onClick={backClick}/>

@@ -5,14 +5,12 @@ import { db, auth, storage } from '../../firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { ChatRoomWrapper, MessageListWrapper, MessageWrapper, MessageContent, SenderInfo, MessageTimestamp, MessageInputWrapper, MessageInput, SendMessageButton, DateSeparator } from '../../styles/emotion';
 import ReactMarkdown from 'react-markdown';
-import Loading from '@/components/loading';
 
 const defaultImageRef = ref(storage, '/petbuddy/profile.svg');
 
 export default function ChatId() {
     const router = useRouter();
     const { chatId } = router.query;
-    const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
     const [newMessage, setNewMessage] = useState('');
@@ -141,10 +139,6 @@ export default function ChatId() {
         img: ({ src, alt }) => <img src={src} alt={alt} style={{ maxWidth: '50px', maxHeight: '50px', borderRadius: '50%', marginTop: '-20px' }} />
     };
 
-    if (!chatId) {
-        return <div>Loading...</div>; // chatId가 없을 때 로딩 상태를 표시
-    }
-
     let previousDate = '';
 
     return (
@@ -170,7 +164,7 @@ export default function ChatId() {
                                     {formatTime(message.timestamp?.toDate())}
                                 </MessageTimestamp>
                                 <MessageContent>
-                                    <p>{message.content}</p>
+                                    <div>{message.content}</div>
                                 </MessageContent>
                             </MessageWrapper>
                         ) : (
@@ -181,7 +175,7 @@ export default function ChatId() {
                                     </ReactMarkdown>
                                 </SenderInfo>
                                 <MessageContent>
-                                    <p>{message.content}</p>
+                                    <div>{message.content}</div>
                                 </MessageContent>
                                 <MessageTimestamp>
                                     {formatTime(message.timestamp?.toDate())}

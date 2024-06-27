@@ -4,7 +4,6 @@ import { db } from '../../firebase';
 import { collection, query, getDocs, orderBy, limit } from 'firebase/firestore';
 import { ChatWrapper, ChatList, ChatRoomList, ChatRoomItem, ChatRoomButton, ChatRoomDetails, ChatRoomName, ChatRoomDate, DivisionLine_2 } from '../../styles/emotion';
 import useAuthStore from '@/zustand/authStore'; // authStore 불러오기
-import Loading from '@/components/loading';
 
 export default function Chat() {
     const router = useRouter();
@@ -92,7 +91,7 @@ export default function Chat() {
                         );
                     })
                 ) : (
-                    <p>참여 중인 채팅방이 없습니다.</p>
+                    <div>참여 중인 채팅방이 없습니다.</div>
                 )}
             </ChatRoomList>
         </ChatWrapper>

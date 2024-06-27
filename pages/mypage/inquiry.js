@@ -73,13 +73,13 @@ export default function Inquiry() {
                 {inquiries.length > 0 ? (
                     inquiries.map((inquiry) => (
                         <div key={inquiry.id}>
-                            <p>제목: {inquiry.title}</p>
-                            <p>내용: {inquiry.content}</p>
-                            <p>{inquiry.answered ? '답변 완료' : '답변 대기 중'}</p>
+                            <div>제목: {inquiry.title}</div>
+                            <div>내용: {inquiry.content}</div>
+                            <div>{inquiry.answered ? '답변 완료' : '답변 대기 중'}</div>
                         </div>
                     ))
                 ) : (
-                    <p>작성한 문의글이 없습니다.</p>
+                    <div>작성한 문의글이 없습니다.</div>
                 )}
             </InquiryList>
         </InquiryWrapper>

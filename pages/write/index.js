@@ -93,10 +93,6 @@ export default function Write() {
             console.error('Error adding document: ', error);
         }
     };
-
-    const handleGoBack = () => {
-        router.back(); // 이전 페이지로 돌아가기
-    };
     
     if (loading) {
         return (
@@ -108,7 +104,6 @@ export default function Write() {
     return (
         <>
             <WrapperWrite>
-                <button onClick={handleGoBack}>뒤로가기</button>
                 <FormWrapper onSubmit={handleSubmit}>
                     <CategorySelect>
                         <select value={category} onChange={handleCategoryChange}>

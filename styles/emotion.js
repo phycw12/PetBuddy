@@ -159,7 +159,7 @@ export const PostTitle = styled.h3`
     margin: 10px 0;
 `;
 
-export const PostAuthor = styled.p`
+export const PostAuthor = styled.div`
     font-size: 14px;
     color: #777777;
 `;
@@ -168,7 +168,7 @@ export const PostContent = styled.div`
     padding: 15px;
 `;
 
-export const PostText = styled.p`
+export const PostText = styled.div`
     font-size: 14px;
     line-height: 1.5;
     color: #333333;
@@ -207,7 +207,7 @@ export const PostImage = styled.img`
     border-radius: 10px 10px 0 0;
 `;
 
-export const PostDate = styled.p`
+export const PostDate = styled.div`
     font-size: 12px;
     color: #999999;
     margin-bottom: 10px;
@@ -667,7 +667,7 @@ export const PostIdContents = styled.div`
     margin-top: 20px;
     font-size: 16px;
 
-    p {
+    div {
         margin-bottom: 10px;
     }
 
@@ -1047,7 +1047,7 @@ export const FindWrapper = styled.div`
         cursor: pointer;
     }
 
-    p {
+    div {
         margin: 0;
         font-size: 13px;
         color: #333;
@@ -1062,7 +1062,6 @@ export const InquiryWrapper = styled.div`
     border: 1px solid #ccc;
     border-radius: 8px;
     margin: 50px auto;
-    height: 600px;
 
     h1 {
         font-size: 20px;
@@ -1111,7 +1110,7 @@ export const InquiryWrapper = styled.div`
         margin-bottom: 10px;
     }
 
-    p {
+    div {
         font-size: 13px;
         margin-bottom: 5px;
     }
@@ -1125,10 +1124,6 @@ export const InquiryList = styled.div`
         border-radius: 4px;
         padding: 10px;
         margin-bottom: 10px;
-    }
-
-    p {
-        margin: 0;
     }
 `;
 
@@ -1332,7 +1327,7 @@ export const MessageContent = styled.div`
     word-wrap: break-word;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     align-self: ${props => props.isSelf ? 'flex-end' : 'flex-start'};
-    p {
+    div {
         margin: 0;
         padding: 5px;
     }

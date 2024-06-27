@@ -102,7 +102,7 @@ export default function PostManager() {
                     </PostWrittenWrapper>
                 ))
             ) : (
-                <p>작성된 글이 없습니다.</p>
+                <div>작성된 글이 없습니다.</div>
             )}
             <CommentWritten>작성댓글</CommentWritten>
             {userComments.length > 0 ? (
@@ -127,7 +127,7 @@ export default function PostManager() {
                     </CommentWrittenWrapper>
                 ))
             ) : (
-                <p>작성된 댓글이 없습니다.</p>
+                <div>작성된 댓글이 없습니다.</div>
             )}
         </PostManagementWrapper>
     );

@@ -4,15 +4,12 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import useAuthStore from '@/zustand/authStore';
 import { LoginContainer, LoginTitle, LoginID, LoginPW, LoginBtn, SignupFind } from '../../styles/emotion';
-import Loading from '@/components/loading';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [localUser, setLocalUser] = useState(null); // 사용자 상태 추가
     const { setUser: setAuthUser } = useAuthStore(); // Zustand에서 사용자 상태 관리 함수
-    // const [loading, setLoading] = useState(true);
-
     const router = useRouter();
 
     useEffect(() => {
@@ -52,12 +49,6 @@ export default function Login() {
     const handleLinkClick = (href) => {
         router.push(href);
     };
-
-    // if (loading) {
-    //     return (
-    //         <Loading/>
-    //     );
-    // };
 
     return (
         <LoginContainer>
