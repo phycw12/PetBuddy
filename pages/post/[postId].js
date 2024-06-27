@@ -5,6 +5,7 @@ import { doc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, ge
 import { ref, deleteObject } from "firebase/storage";
 import ReactMarkdown from 'react-markdown';
 import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn, ChatButton } from '../../styles/emotion';
+import Loading from '@/components/loading';
 
 export default function Post() {
     const router = useRouter();
@@ -253,8 +254,9 @@ export default function Post() {
                 <img src={src} alt={alt} style={{ maxWidth: '50px', maxHeight: '50px', borderRadius: '50%' }} />
         )
     };
+
     if (!post) {
-        return <div>Loading...</div>;
+        return <Loading/>;
     };
 
     return (
