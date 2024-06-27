@@ -992,7 +992,6 @@ export const ProfileWithdrawButton = styled.div`
     text-align: center;
 `;
 
-
 // search page
 
 export const FindWrapper = styled.div`
@@ -1003,56 +1002,63 @@ export const FindWrapper = styled.div`
     width: 100%;
     max-width: 450px;
     margin: 50px auto;
+`;
 
-    input {
-        padding: 8px;
-        margin-right: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 13px;
-    }
+export const FindInput = styled.input`
+    width: 70%;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+`;
 
-    button {
-        padding: 8px 16px;
-        background-color: #FF86C4;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-    }
+export const SearchButton = styled.button`
+    padding: 8px 16px;
+    background-color: #FF86C4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
 
-    button:hover {
+    &:hover {
         background-color: #FF62AE;
     }
+`;
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 10px 0;
-    }
+export const NoResults = styled.div`
+    margin-top: 10px;
+    color: red;
+`;
 
-    li {
-        margin-bottom: 10px;
-        padding: 10px;
-        border: 1px solid #eee;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+export const ResultsList = styled.ul`
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+`;
 
-    h3 {
-        margin: 0;
-        font-size: 16px;
-        color: #007bff;
-        cursor: pointer;
-    }
+export const ResultItem = styled.li`
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+`;
 
-    div {
-        margin: 0;
-        font-size: 13px;
-        color: #333;
-        cursor: pointer;
-    }
+export const ResultTitle = styled.h3`
+    margin: 0;
+    font-size: 16px;
+    color: #007bff;
+    cursor: pointer;
+`;
+
+export const ResultContent = styled.div`
+    margin: 0;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    word-break: break-all;
 `;
 
 // inquiry
@@ -1062,69 +1068,74 @@ export const InquiryWrapper = styled.div`
     border: 1px solid #ccc;
     border-radius: 8px;
     margin: 50px auto;
+`;
 
-    h1 {
-        font-size: 20px;
-        margin-bottom: 10px;
-    }
+export const InquiryTitle = styled.h1`
+    font-size: 20px;
+    margin-bottom: 10px;
+`;
 
-    label {
-        font-size: 14px;
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: block;
-    }
+export const InquiryLabel = styled.label`
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+`;
 
-    input[type='text'],
-    textarea {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 13px;
-    }
+export const InquiryInput = styled.input`
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+`;
 
-    textarea {
-        resize: vertical;
-        min-height: 100px;
-    }
+export const InquiryTextarea = styled.textarea`
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 100px;
+`;
 
-    button {
-        padding: 8px 16px;
-        background-color: #FF86C4;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-    }
+export const InquiryButton = styled.button`
+    padding: 8px 16px;
+    background-color: #FF86C4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
 
-    button:hover {
+    &:hover {
         background-color: #FF62AE;
     }
+`;
 
-    h2 {
-        font-size: 16px;
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
+export const InquirySubtitle = styled.h2`
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+`;
 
-    div {
-        font-size: 13px;
-        margin-bottom: 5px;
-    }
+export const InquiryText = styled.div`
+    font-size: 13px;
+    margin-bottom: 5px;
 `;
 
 export const InquiryList = styled.div`
     margin-top: 10px;
+`;
 
-    div {
-        border: 1px solid #eee;
-        border-radius: 4px;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
+export const InquiryListItem = styled.div`
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
 `;
 
 // accountRecovery

@@ -105,7 +105,7 @@ export default function Main(){
 
     if (loading) {
         return <Loading/>;
-    }
+    };
 
     const postsToDisplay = sortOrder === 'createdAt' ? recentPosts : popularPosts;
 

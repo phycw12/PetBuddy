@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import useAuthStore from '@/zustand/authStore';
-import { InquiryWrapper, InquiryList } from '../../styles/emotion';
+import { InquiryWrapper, InquiryTitle, InquiryLabel, InquiryInput, InquiryTextarea, InquiryButton, InquirySubtitle, InquiryText, InquiryList, InquiryListItem } from '../../styles/emotion';
 
 export default function Inquiry() {
     const { user } = useAuthStore();
@@ -59,27 +59,27 @@ export default function Inquiry() {
 
     return (
         <InquiryWrapper>
-            <h1>문의 게시판</h1>
-            <label>문의 제목:</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <InquiryTitle>문의 게시판</InquiryTitle>
+            <InquiryLabel>문의 제목:</InquiryLabel>
+            <InquiryInput type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
             <br />
-            <label>문의 내용:</label>
-            <textarea value={content} onChange={(e) => setContent(e.target.value)} />
+            <InquiryLabel>문의 내용:</InquiryLabel>
+            <InquiryTextarea value={content} onChange={(e) => setContent(e.target.value)} />
             <br />
-            <button onClick={handleInquiry}>문의하기</button>
+            <InquiryButton onClick={handleInquiry}>문의하기</InquiryButton>
 
-            <h2>나의 문의글 목록</h2>
+            <InquirySubtitle>나의 문의글 목록</InquirySubtitle>
             <InquiryList>
                 {inquiries.length > 0 ? (
                     inquiries.map((inquiry) => (
-                        <div key={inquiry.id}>
-                            <div>제목: {inquiry.title}</div>
-                            <div>내용: {inquiry.content}</div>
-                            <div>{inquiry.answered ? '답변 완료' : '답변 대기 중'}</div>
-                        </div>
+                        <InquiryListItem key={inquiry.id}>
+                            <InquiryText>제목: {inquiry.title}</InquiryText>
+                            <InquiryText>내용: {inquiry.content}</InquiryText>
+                            <InquiryText>{inquiry.answered ? '답변 완료' : '답변 대기 중'}</InquiryText>
+                        </InquiryListItem>
                     ))
                 ) : (
-                    <div>작성한 문의글이 없습니다.</div>
+                    <InquiryText>작성한 문의글이 없습니다.</InquiryText>
                 )}
             </InquiryList>
         </InquiryWrapper>

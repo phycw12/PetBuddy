@@ -27,6 +27,10 @@ export default function BackBtn() {
     const backClick = () => {
         router.back();
     };
+
+    if (loading) {
+        return <div> </div>;
+    };
     
     return(
         <Back>
