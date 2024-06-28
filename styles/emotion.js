@@ -157,11 +157,13 @@ export const PostTitle = styled.h3`
     font-size: 18px;
     font-weight: bold;
     margin: 10px 0;
+    text-align: center;
 `;
 
 export const PostAuthor = styled.div`
     font-size: 14px;
     color: #777777;
+    text-align: center;
 `;
 
 export const PostContent = styled.div`
@@ -179,16 +181,12 @@ export const CommentSection = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
-`;
-
-export const CommentIcon = styled.span`
-    color: #999999;
-    font-size: 14px;
-`;
-
-export const CommentCount = styled.span`
+    padding: 10px 15px;
     font-size: 12px;
-    color: #999999;
+`;
+
+export const CommentAuthor = styled.span`
+    margin-right: 3px;
 `;
 
 // index
@@ -211,6 +209,7 @@ export const PostDate = styled.div`
     font-size: 12px;
     color: #999999;
     margin-bottom: 10px;
+    text-align: center;
 `;
 
 export const PostFooter = styled.div`
@@ -220,6 +219,18 @@ export const PostFooter = styled.div`
     color: #999999;
     padding: 10px 15px;
 `;
+
+export const PostFooterView = styled.span`
+    text-align: center;
+`
+
+export const PostFooterComment = styled.span`
+    text-align: center;
+`
+
+export const PostFooterHeart = styled.span`
+    text-align: center;
+`
 
 // board
 
@@ -652,12 +663,21 @@ export const PostIdContainer = styled.div`
 `;
 
 export const PostIdTitle = styled.h1`
-    font-size: 24px;
+    font-size: 18px;
     margin-bottom: 10px;
 `;
 
 export const MetaInfo = styled.div`
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+`;
+
+export const List = styled.div`
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
     font-size: 14px;
     margin-bottom: 10px;
@@ -665,7 +685,7 @@ export const MetaInfo = styled.div`
 
 export const PostIdContents = styled.div`
     margin-top: 20px;
-    font-size: 16px;
+    font-size: 14px;
 
     div {
         margin-bottom: 10px;
@@ -678,25 +698,17 @@ export const PostIdContents = styled.div`
     }
 `;
 
+export const PostButton = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
 export const ActionButtons = styled.div`
-    margin-bottom: 10px;
-
-    button {
-        margin-right: 10px;
-        padding: 8px 16px;
-        background-color: #FF86C4;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #FF62AE;
-        }
-    }
+    
 `;
 
 export const PostIdButton = styled.button`
+    margin-bottom: 10px;
     padding: 8px 16px;
     background-color: #FF86C4;
     color: white;
@@ -719,16 +731,17 @@ export const Comment = styled.div`
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 10px;
+    font-size: 12px;
 `;
 
 export const CommentHeader = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+`;
 
-    span {
-        font-weight: bold;
-    }
+export const CommentHeaderAuthor = styled.span`
+    margin-right: 3px;
 `;
 
 export const CommentBody = styled.div`

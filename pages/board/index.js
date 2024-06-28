@@ -4,7 +4,7 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
 import { db } from '../../firebase';
 import ReactMarkdown from 'react-markdown';
-import { Wrapper, WriteHeader, Write, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitle, PostContent, PostText, PostAuthor, PostImage, CommentSection, CommentIcon, CommentCount } from '../../styles/emotion';
+import { Wrapper, WriteHeader, Write, Section, MenuList, OrderBy, OrderByList, Menu, PostList, Post, PostTitle, PostContent, PostText, PostAuthor, CommentSection, PostFooterView, PostFooterComment } from '../../styles/emotion';
 import SearchIcon from '@/components/search';
 import Loading from '@/components/loading';
 
@@ -37,6 +37,7 @@ export default function Board() {
 
     useEffect(() => {
         async function fetchPosts() {
+            setLoading(true); // 로딩 상태 시작
             const q = query(
                 collection(db, 'posts'),
                 where('category', '==', activeMenu),
@@ -44,10 +45,20 @@ export default function Board() {
             );
             const querySnapshot = await getDocs(q);
             const fetchedPosts = [];
-            querySnapshot.forEach((doc) => {
-                fetchedPosts.push({ id: doc.id, ...doc.data() });
-            });
+
+            // 각 게시물의 댓글 수를 가져오는 부분
+            for (const doc of querySnapshot.docs) {
+                const postData = doc.data();
+                const commentsQuerySnapshot = await getDocs(query(
+                    collection(db, 'comments'),
+                    where('postId', '==', doc.id)
+                ));
+                const commentsCount = commentsQuerySnapshot.size;
+                fetchedPosts.push({ id: doc.id, commentsCount, ...postData });
+            }
+
             setPosts(fetchedPosts);
+            setLoading(false); // 로딩 상태 종료
         }
         fetchPosts();
     }, [sortOrder, activeMenu]);
@@ -146,8 +157,8 @@ export default function Board() {
                                     </PostText>
                                 </PostContent>
                                 <CommentSection>
-                                    <CommentIcon>💬</CommentIcon>
-                                    <CommentCount>댓글수</CommentCount>
+                                    <PostFooterView>조회수 {post.views}</PostFooterView>
+                                    <PostFooterComment>💬 {post.commentsCount}</PostFooterComment>
                                 </CommentSection>
                             </Post>
                         );

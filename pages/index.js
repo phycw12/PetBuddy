@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useAuthStore from '@/zustand/authStore';
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getStorage, getDownloadURL, ref } from 'firebase/storage';
-import { Wrapper, Section, OrderBy, OrderByList, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage } from '../styles/emotion';
+import { Wrapper, Section, OrderBy, OrderByList, PostList, Post, PostTitleImg, PostTitle, PostDate, PostAuthor, PostFooter, PostImage, PostFooterView, PostFooterComment } from '../styles/emotion';
 import LogoTitle from '@/components/logo';
 import SearchIcon from '@/components/search';
 import Loading from '@/components/loading';
 
-export default function Main(){
+export default function Main() {
     const [popularPosts, setPopularPosts] = useState([]);
     const [recentPosts, setRecentPosts] = useState([]);
     const { user } = useAuthStore();
@@ -38,21 +38,32 @@ export default function Main(){
 
     useEffect(() => {
         async function fetchPosts() {
+            setLoading(true); // 로딩 상태 시작
             const q = query(
                 collection(db, 'posts'),
                 orderBy(sortOrder, 'desc')
             );
             const querySnapshot = await getDocs(q);
             const posts = [];
-            querySnapshot.forEach((doc) => {
-                posts.push({ id: doc.id, ...doc.data() });
-            });
+
+            // 각 게시물의 댓글 수를 가져오는 부분
+            for (const doc of querySnapshot.docs) {
+                const postData = doc.data();
+                const commentsQuerySnapshot = await getDocs(query(
+                    collection(db, 'comments'),
+                    where('postId', '==', doc.id)
+                ));
+                const commentsCount = commentsQuerySnapshot.size;
+                posts.push({ id: doc.id, commentsCount, ...postData });
+            }
 
             if (sortOrder === 'createdAt') {
                 setRecentPosts(posts);
             } else {
                 setPopularPosts(posts);
             }
+
+            setLoading(false); // 로딩 상태 종료
         }
 
         fetchPosts();
@@ -104,14 +115,14 @@ export default function Main(){
     };
 
     if (loading) {
-        return <Loading/>;
+        return <Loading />;
     };
 
     const postsToDisplay = sortOrder === 'createdAt' ? recentPosts : popularPosts;
 
     return (
         <>
-            <LogoTitle/>
+            <LogoTitle />
             <Wrapper>
                 <Section>
                     <SearchIcon />
@@ -141,8 +152,9 @@ export default function Main(){
                                         }).format(post.createdAt.toDate())}
                                     </PostDate>
                                     <PostFooter>
-                                        <span>조회수 {post.views}</span>
-                                        <span>♡ {post.heart}</span>
+                                        <PostFooterView>조회수 {post.views}</PostFooterView>
+                                        <PostFooterComment>💬 {post.commentsCount}</PostFooterComment>
+                                        {/* <PostFooterHeart>♡ {post.heart}</PostFooterHeart> */}
                                     </PostFooter>
                                 </Post>
                             );

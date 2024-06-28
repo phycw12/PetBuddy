@@ -4,7 +4,7 @@ import { db, auth, storage } from '../../firebase';
 import { doc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, getDocs, onSnapshot, orderBy } from 'firebase/firestore';
 import { ref, deleteObject } from "firebase/storage";
 import ReactMarkdown from 'react-markdown';
-import { PostIdContainer, PostIdTitle, MetaInfo, PostIdContents, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn, ChatButton } from '../../styles/emotion';
+import { PostIdContainer, PostIdTitle, MetaInfo, List, PostIdContents, PostButton, ActionButtons, PostIdButton, CommentsContainer, Comment, CommentHeader, CommentHeaderAuthor, CommentBody, CommentActions, CommentInputContainer, CommentInput, CommentSubmitButton, CommentEditBtn } from '../../styles/emotion';
 import Loading from '@/components/loading';
 
 export default function Post() {
@@ -262,20 +262,24 @@ export default function Post() {
     return (
         <PostIdContainer>
             <PostIdTitle>제목 : {post.title}</PostIdTitle>
-            {currentUser && (currentUser.uid === post.authorId || userType === 0) && (
-                <ActionButtons>
-                    <PostIdButton onClick={handleEdit}>수정</PostIdButton>
-                    <PostIdButton onClick={handleDelete}>삭제</PostIdButton>
-                </ActionButtons>
-            )}
-            <PostIdButton onClick={() => handleChatButtonClick(post.authorId)}>채팅하기</PostIdButton>
+            <PostButton>
+                {currentUser && (currentUser.uid === post.authorId || userType === 0) && (
+                    <ActionButtons>
+                        <PostIdButton onClick={handleEdit}>수정</PostIdButton>
+                        <PostIdButton onClick={handleDelete}>삭제</PostIdButton>
+                    </ActionButtons>
+                )}
+                <PostIdButton onClick={() => handleChatButtonClick(post.authorId)}>채팅</PostIdButton>
+            </PostButton>
             <MetaInfo>
-                <span>카테고리 : {post.category}</span>
-                <span>
-                    작성자 :{' '}
-                        {post.authorNickname}
-                </span>
-                <span>조회수 : {post.views + 1}</span>
+                <List>
+                    <span>카테고리 : {post.category}</span>
+                    <span>
+                        작성자 :{' '}
+                            {post.authorNickname}
+                    </span>
+                    <span>조회수 : {post.views + 1}</span>
+                </List>
                 <span>
                     작성일 :{' '}
                     {new Intl.DateTimeFormat('ko-KR', {
@@ -304,7 +308,7 @@ export default function Post() {
                     <Comment key={comment.id}>
                         <CommentHeader>
                             <div>
-                                <span>{comment.authorName}</span>
+                                <CommentHeaderAuthor>{comment.authorName}</CommentHeaderAuthor>
                                 <span>
                                     {new Intl.DateTimeFormat('ko-KR', {
                                         year: 'numeric',
