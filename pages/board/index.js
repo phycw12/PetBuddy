@@ -16,9 +16,6 @@ export default function Board() {
     const [sortOrder, setSortOrder] = useState('createdAt');
     const [basicImageUrl, setBasicImageUrl] = useState('');
     const [loading, setLoading] = useState(true);
-    const [visiblePosts, setVisiblePosts] = useState(5); // 초기에 보여질 게시물 수
-    const [nextLoadIndex, setNextLoadIndex] = useState(5); // 다음에 로드할 게시물의 시작 인덱스
-    const [loadingMore, setLoadingMore] = useState(false);
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -27,7 +24,7 @@ export default function Board() {
                 setBasicImageUrl(basicImageURL);
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching images:', error);
+                console.error('이미지를 불러오는 도중 에러가 발생했습니다:', error);
                 setLoading(true);
             }
         };
@@ -37,7 +34,7 @@ export default function Board() {
 
     useEffect(() => {
         async function fetchPosts() {
-            setLoading(true); // 로딩 상태 시작
+            setLoading(true); // 데이터 로딩 시작
             const q = query(
                 collection(db, 'posts'),
                 where('category', '==', activeMenu),
@@ -46,7 +43,7 @@ export default function Board() {
             const querySnapshot = await getDocs(q);
             const fetchedPosts = [];
 
-            // 각 게시물의 댓글 수를 가져오는 부분
+            // 각 게시물의 댓글 수를 가져오기 위한 부분
             for (const doc of querySnapshot.docs) {
                 const postData = doc.data();
                 const commentsQuerySnapshot = await getDocs(query(
@@ -58,33 +55,10 @@ export default function Board() {
             }
 
             setPosts(fetchedPosts);
-            setLoading(false); // 로딩 상태 종료
+            setLoading(false); // 데이터 로딩 완료
         }
         fetchPosts();
     }, [sortOrder, activeMenu]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (!loadingMore && window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-                setLoadingMore(true);
-                const newVisiblePosts = visiblePosts + 5;
-                if (newVisiblePosts <= posts.length) {
-                    setTimeout(() => {
-                        setVisiblePosts(newVisiblePosts);
-                        setNextLoadIndex(newVisiblePosts);
-                        setLoadingMore(false);
-                    }, 1000);
-                } else {
-                    setLoadingMore(false);
-                }
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [visiblePosts, posts, loadingMore]);
 
     const handleMenuClick = (menu) => {
         setActiveMenu(menu);
@@ -120,7 +94,7 @@ export default function Board() {
     };
 
     if (loading) {
-        return <Loading/>;
+        return <Loading />;
     }
 
     return (
@@ -141,7 +115,7 @@ export default function Board() {
                     <Write onClick={clickWriteBtn}>글쓰기</Write>
                 </WriteHeader>
                 <PostList>
-                    {posts.slice(0, visiblePosts).map((post, index) => {
+                    {posts.map((post, index) => {
                         const imageUrls = extractImageUrls(post.content);
                         const postImage = imageUrls.length > 0 ? imageUrls[0] : basicImageUrl;
                         return (
