@@ -283,13 +283,13 @@ export default function ProfileManager() {
             />
             <ProfilePasswordInput
                 type="password"
-                placeholder="비밀번호 변경 input"
+                placeholder="비밀번호 변경"
                 value={password}
                 onChange={handlePasswordChange}
             />
             <ProfilePasswordConfirmInput
                 type="password"
-                placeholder="비밀번호 재확인 input"
+                placeholder="비밀번호 확인"
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
             />
