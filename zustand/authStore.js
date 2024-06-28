@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -42,7 +42,23 @@ const unsubscribe = onAuthStateChanged(auth, async (user) => {
     }
 });
 
-const cleanup = () => unsubscribe();
+// 창이 닫히거나 새로고침될 때 로그아웃
+const handleBeforeUnload = async () => {
+    await signOut(auth);
+    const { clearUser } = useAuthStore.getState();
+    clearUser();
+};
+
+// `beforeunload` 이벤트 핸들러 등록
+if (typeof window !== 'undefined') {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+}
+
+// cleanup 함수에서 `beforeunload` 이벤트 핸들러 제거
+const cleanup = () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+    unsubscribe();
+};
 
 export default useAuthStore;
 export { cleanup };
