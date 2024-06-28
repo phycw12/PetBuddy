@@ -298,7 +298,8 @@ export const WriteHeader = styled.div`
 `;
 
 export const Write = styled.div`
-    font-size: 12px;
+    font-size: 14px;
+    margin-bottom: 7px;
     cursor: pointer;
 `;
 
