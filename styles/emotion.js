@@ -1319,10 +1319,9 @@ export const ChatRoomWrapper = styled.div`
     background-color: #f2f2f2;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
+    margin: 50px auto;
     max-width: 400px;
     box-sizing: border-box;
-    height: 90vh;
 `;
 
 export const MessageListWrapper = styled.div`
