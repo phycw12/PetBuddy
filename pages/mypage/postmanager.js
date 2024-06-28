@@ -4,12 +4,14 @@ import useAuthStore from '@/zustand/authStore';
 import { db } from '../../firebase';
 import { doc, collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 import { PostManagementWrapper, PostWritten, PostWrittenWrapper, DivisionLine2, PostWrittenContainer, PostWrittenTitle, PostManagementDelete, PostManagementDate, CommentWritten, CommentWrittenWrapper, CommentWrittenContainer, CommentWrittenContent, CommentWrittenTitle } from '../../styles/emotion';
+import Loading from '@/components/loading';
 
 export default function PostManager() {
     const router = useRouter();
     const { user } = useAuthStore();
     const [userPosts, setUserPosts] = useState([]);
     const [userComments, setUserComments] = useState([]);
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const fetchUserPostsAndComments = async () => {
@@ -24,8 +26,10 @@ export default function PostManager() {
                     const commentsSnapshot = await getDocs(commentsQuery);
                     const comments = commentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     setUserComments(comments);
+                    setLoading(false);
                 } catch (error) {
                     console.error('Error fetching user posts and comments: ', error);
+                    setLoading(true);
                 }
             }
         };
@@ -76,6 +80,10 @@ export default function PostManager() {
 
     const handleClick = (postId) => {
         router.push(`/post/${postId}`);
+    };
+
+    if (loading) {
+        return <Loading/>;
     };
 
     return (
